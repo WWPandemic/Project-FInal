@@ -4,14 +4,12 @@
 class Menu
 {
 private:
-
 	void outputIntroduction();
-	
 	void getInput();
 	void runOptions();
 protected:
 	bool isUsingMenu;
-	string* introductions;
+	std::string* introductions;
 public:
 	Menu();
 	~Menu();
