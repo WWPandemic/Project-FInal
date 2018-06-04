@@ -13,5 +13,13 @@ protected:
 public:
 	Menu();
 	~Menu();
-	void runMenu();
+	void runMenu()
+	{
+		do
+		{
+			outputIntroduction();
+			getInput();
+			runOptions();
+		} while (isUsingMenu);
+	}
 };
