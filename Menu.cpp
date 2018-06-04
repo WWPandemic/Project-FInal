@@ -29,12 +29,3 @@ Menu::~Menu()
 {
 	delete introductions;
 }
-void Menu::runMenu()
-{
-	do
-	{
-		outputIntroduction();
-		getInput();
-		runOptions();
-	} while (isUsingMenu);
-}
