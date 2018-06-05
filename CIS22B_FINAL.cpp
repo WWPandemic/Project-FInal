@@ -2,6 +2,7 @@
 #include <string>
 #include "Book.h"
 #include "Menu.h"
+#include "MainMenu.h"
 #include "Inventory.h"
 #include "Report.h"
 
