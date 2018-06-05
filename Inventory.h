@@ -26,6 +26,10 @@ private:
 		}
 	};
 	//Bundle books;
+	void LookUpBooks() {}
+	void AddNewBooks() {}
+	void DeleteBooks() {}
+	void EditBookInformation() {}
 public:
 	Inventory()
 	{
