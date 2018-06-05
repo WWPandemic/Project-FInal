@@ -4,13 +4,6 @@
 using namespace std;
 
 
-void Menu::outputIntroduction()
-{
-	for (int ind = 0; ind < introductions->length; ind++)
-	{
-		cout << introductions[ind] << endl;
-	}
-}
 void Menu::getInput() {}
 void Menu::runOptions()
 {
