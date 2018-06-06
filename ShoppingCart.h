@@ -1,4 +1,3 @@
-// ShoppingCart class declarations
 #pragma once
 #include "Bundle.h"
 
@@ -17,12 +16,12 @@ public:
 	ShoppingCart();
 
 	// Accessors
-	double getSubtotal();				// Return subtotal
-	double getTotalCost();				// Return totalCost
-	double getTotalProfit();			// Return totalProfit
-	double getAmountPaid();				// Return amountPaid
-	double getChange();					// Return change
-	double getTax();					// Return tax amount
+	double getSubtotal() const;				// Return subtotal
+	double getTotalCost() const;			// Return totalCost
+	double getTotalProfit() const;			// Return totalProfit
+	double getAmountPaid() const;			// Return amountPaid
+	double getChange() const;				// Return change
+	double getTax() const;					// Return tax amount
 
 	// Mutators
 	void addSubtotal(double c);			// Add amount to subtotal

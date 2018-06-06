@@ -1,6 +1,10 @@
-// ShoppingCart class definitions
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include "ShoppingCart.h"
+
+//**************************
+//* Constructor definition *
+//**************************
 
 ShoppingCart::ShoppingCart()
 {
@@ -12,6 +16,7 @@ ShoppingCart::ShoppingCart()
 	
 	// Ask user for isbns to create dynamic array of Books
 		// Validate book exists and in stock
+		// Adjust variables
 	
 	processPay();
 }
@@ -20,34 +25,34 @@ ShoppingCart::ShoppingCart()
 //* Accessor definitions *
 //************************
 
-double ShoppingCart::getSubtotal()					// Return subtotal
+double ShoppingCart::getSubtotal() const		// Return subtotal
 {
 	return subtotal;
 }
 
-double ShoppingCart::getTotalCost()					// Return totalCost
+double ShoppingCart::getTotalCost() const		// Return totalCost
 {
 	return totalCost;
 }
 
-double ShoppingCart::getTotalProfit()				// Return totalProfit
+double ShoppingCart::getTotalProfit() const		// Return totalProfit
 {
 	return totalProfit;
 }
 
-double ShoppingCart::getAmountPaid()				// Return amountPaid
+double ShoppingCart::getAmountPaid() const		// Return amountPaid
 {
 	return amountPaid;
 }
 
-double ShoppingCart::getChange()					// Return change
+double ShoppingCart::getChange() const		// Return change
 {
 	return change;
 }
 
-double ShoppingCart::getTax()						// Return tax amount
+double ShoppingCart::getTax() const		// Return tax amount
 {
-	return subtotal * TAX_RATE;
+	return subtotal * (TAX_RATE/100);
 }
 
 //***********************
@@ -66,7 +71,7 @@ void ShoppingCart::addTotalProfit(double p)			// Add amount to totalProfit
 
 void ShoppingCart::calculateTotal()					// Calculate totalCost
 {
-	totalCost = subtotal + (subtotal * TAX_RATE);
+	totalCost = subtotal + getTax();
 }
 
 void ShoppingCart::calculateChange()				// Calculate change
@@ -84,6 +89,10 @@ void ShoppingCart::processPay()						// Input value for amountPaid
 	amountPaid = x;
 }
 
-//************************
-//* Function definitions *
-//************************
+/*
+To do:
+- input validation
+- stock validation
+- cancel creation of shopping cart
+- bundle integration
+*/

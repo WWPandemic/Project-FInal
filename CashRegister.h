@@ -1,4 +1,3 @@
-// CashRegister Class declarations
 #pragma once
 #include <string>
 #include "Bundle.h"
@@ -22,12 +21,12 @@ public:
 	
 	// Accessors 
 	std::string getDate();				// Return date as string
-	double getBalance();				// Return balance
-	double getSales();					// Return totalSales
-	double getProfit();					// Return totalProfit
-	double getTax();					// Return totalTax
-	int getTransactions();				// Return transactions
-	int getBooksSold();					// Return booksSold
+	double getBalance() const;			// Return balance
+	double getSales() const;			// Return totalSales
+	double getProfit() const;			// Return totalProfit
+	double getTax() const;				// Return totalTax
+	int getTransactions() const;		// Return transactions
+	int getBooksSold() const;			// Return booksSold
 
 	// Mutators
 	void setDate(int m, int d, int y);	// Set currentDate
@@ -39,8 +38,8 @@ public:
 	void addBookSold();					// Add one to booksSold
 
 	// Functions
-	ShoppingCart newTransaction(Bundle b);		// Create a new transaction
-	void refundBook(Bundle b);					// Refund a book
+	ShoppingCart newTransaction(Bundle b);		// Create a new transaction (pass main book bundle)
+	void refundBook(Bundle b);					// Refund a book (pass main book bundle)
 	void printReceipt(ShoppingCart c);			// Print details of current transaction
 	void printSalesReport();					// Print sales report of cash register
 	void printLines(int l);						// Print lines for formatting

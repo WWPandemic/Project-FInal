@@ -1,4 +1,4 @@
-// CashRegister class definitions
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -35,32 +35,32 @@ std::string CashRegister::getDate()			// Return date as string
 	return currentDate.toString();
 }
 
-double CashRegister::getBalance()			// Return balance
+double CashRegister::getBalance() const		// Return balance
 {
 	return balance;
 }
 
-double CashRegister::getSales()				// Return totalSales
+double CashRegister::getSales() const		// Return totalSales
 {
 	return totalSales;
 }
 
-double CashRegister::getProfit()			// Return totalProfit
+double CashRegister::getProfit() const		// Return totalProfit
 {
 	return totalProfit;
 }
 
-double CashRegister::getTax()				// Return totalTax
+double CashRegister::getTax() const		// Return totalTax
 {
 	return totalTax;
 }
 
-int CashRegister::getTransactions()			// Return transactions
+int CashRegister::getTransactions() const		// Return transactions
 {
 	return transactions;
 }
 
-int CashRegister::getBooksSold()			// Return booksSold
+int CashRegister::getBooksSold() const		// Return booksSold
 {
 	return booksSold;
 }
@@ -123,41 +123,39 @@ void CashRegister::refundBook(Bundle b)					// Refund a book
 	// Add one to book quantity
 }
 
-// *** Needs reformatting ***
 void CashRegister::printReceipt(ShoppingCart c)			// Print details of current transaction
 {
-	printLines(25);
-	std::cout << "Serendipity Booksellers Order Summary" << std::endl;
-	std::cout << currentDate.toString() << std::endl;
-	printLines(25);
+	printLines(50);
+	std::cout << std::setw(44) << "Serendipity Booksellers Order Summary" << std::endl;
+	std::cout << std::setw(30) << currentDate.toString() << std::endl;
+	printLines(50);
 
 	// Print book details (title, author, price)
 
-	printLines(25);
+	printLines(50);
 	std::cout << std::setprecision(2) << std::fixed;
-	std::cout << "Subtotal: $" << c.getSubtotal() << std::endl;
-	std::cout << "Tax: $" << c.getTax() << std::endl;
-	std::cout << "Total: $" << c.getTotalCost << std::endl << std::endl;
-	std::cout << "Amount Paid: $" << c.getAmountPaid() << std::endl;
-	std::cout << "Change: $" << c.getChange() << std::endl;
-	printLines(25);
+	std::cout << std::setw(40) << std::left << "Subtotal:" << c.getSubtotal() << std::endl;
+	std::cout << std::setw(40) << std::left << "Tax:" << c.getTax() << std::endl;
+	std::cout << std::setw(40) << std::left << "Total:" << c.getTotalCost() << std::endl << std::endl;
+	std::cout << std::setw(40) << std::left << "Amount Paid:" << c.getAmountPaid() << std::endl;
+	std::cout << std::setw(40) << std::left << "Change:" << c.getChange() << std::endl;
+	printLines(50);
 }
 
-// *** Needs reformatting ***
 void CashRegister::printSalesReport()					// Print sales report of cash register
 {
-	printLines(25);
-	std::cout << "Serendipity Booksellers Sales Report" << std::endl;
-	std::cout << currentDate.toString() << std::endl;
-	printLines(25);
+	printLines(50);
+	std::cout << std::setw(43) << "Serendipity Booksellers Sales Report" << std::endl;
+	std::cout << std::setw(30) << currentDate.toString() << std::endl;
+	printLines(50);
 	std::cout << std::setprecision(2) << std::fixed << std::endl;
-	std::cout << "Register Balance: $" << getBalance() << std::endl;
-	std::cout << "Total Sales: $" << getSales() << std::endl;
-	std::cout << "Total Tax: $" << getTax() << std::endl;
-	std::cout << "Total Profit: $" << getProfit() << std::endl;
-	std::cout << "Number of Transactions: " << getTransactions() << std::endl;
-	std::cout << "Number of Books Sold: " << getBooksSold() << std::endl << std::endl;
-	printLines(25);
+	std::cout << std::setw(40) << std::left << "Register Balance:" << getBalance() << std::endl;
+	std::cout << std::setw(40) << std::left << "Total Sales:" << getSales() << std::endl;
+	std::cout << std::setw(40) << std::left << "Total Tax:" << getTax() << std::endl;
+	std::cout << std::setw(40) << std::left << "Total Profit:" << getProfit() << std::endl;
+	std::cout << std::setw(40) << std::left << "Number of Transactions:" << getTransactions() << std::endl;
+	std::cout << std::setw(40) << std::left << "Number of Books Sold:" << getBooksSold() << std::endl << std::endl;
+	printLines(50);
 }
 
 void CashRegister::printLines(int l)					// Print lines for formatting
@@ -167,3 +165,16 @@ void CashRegister::printLines(int l)					// Print lines for formatting
 	}
 	std::cout << std::endl;
 }
+
+
+/*
+To do:
+- newTransaction
+- refundBook
+- input validation
+- book details for printReceipt
+- static variable for transactions
+
+
+- possible feature: save receipts to output file
+*/
