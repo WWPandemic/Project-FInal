@@ -1,7 +1,15 @@
+#include <iostream>
 #include "Book.h"
 
 Book::Book() {
-	type = 1;
+	this->title = "";
+	this->author = "";
+	this->publisher = "";
+	this->ISBN = 0;
+	this->dateAdded = Date();
+	this->quantityOnHand = 0;
+	this->wholesaleCost = 0;
+	this->retailPrice = 0;
 }
 
 Book::Book(std::string title, std::string author, std::string publisher, int ISBN, Date dateAdded, int quantityOnHand, double wholesaleCost, double retailPrice) {
@@ -13,7 +21,12 @@ Book::Book(std::string title, std::string author, std::string publisher, int ISB
 	this->quantityOnHand = quantityOnHand;
 	this->wholesaleCost = wholesaleCost;
 	this->retailPrice = retailPrice;
-	type = 1;
+}
+
+std::ostream& operator<<(std::ostream& os, const Book& b) {
+	Book book = b;
+	os << book.toString();
+	return os;
 }
 
 std::string Book::getTitle() const{
@@ -32,7 +45,7 @@ int Book::getISBN() const{
 	return ISBN;
 }
 
-Date Book::getDataAdded() const{
+Date Book::getDateAdded() const{
 	return dateAdded;
 }
 
@@ -48,11 +61,7 @@ double Book::getRetailPrice() const{
 	return retailPrice;
 }
 
-int Book::getType() const{
-	return type;
-}
-
-std::string Book::toString() {
+std::string Book::toString() const{
 	std::string str = title + " " + author + " " + publisher;
 	str.append(" " + std::to_string(ISBN));
 	str.append(" " + dateAdded.toString());
@@ -60,4 +69,8 @@ std::string Book::toString() {
 	str.append(" " + std::to_string(wholesaleCost));
 	str.append(" " + std::to_string(retailPrice));
 	return str;
+}
+
+void Book::print() {
+	std::cout << this->toString() << std::endl;
 }

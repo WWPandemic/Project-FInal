@@ -1,34 +1,63 @@
+#include <iostream>
+#include <ostream>
 #include "Date.h"
 
 Date::Date() {
-	*(date + 0) = 1;
-	*(date + 1) = 1;
-	*(date + 2) = 1;
+	setDate(1, 1, 1);
+}
+
+Date::Date(int date[3]) {
+	setDate(date);
 }
 
 Date::Date(int month, int day, int year) {
-	*(date + 0) = month;
-	*(date + 1) = day;
-	*(date + 2) = year;
+	setDate(month, day, year);
 }
 
-int *Date::getDate() {
+Date::Date(const Date &src) {
+	setDate(src.getDate());
+}
+
+Date::~Date() {
+	delete[]date;
+}
+
+Date Date::operator=(const Date &src) {
+	setDate(src.getDate());
+	return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const Date& dt) {
+	os << dt.toString();
+	return os;
+}
+
+const int *Date::getDate() const {
 	return date;
 }
 
+void Date::setDate(int date[3]) {
+	this->date = new int[3];
+	*(this->date + 0) = date[0];
+	*(this->date + 1) = date[1];
+	*(this->date + 2) = date[2];
+}
+
 void Date::setDate(int month, int day, int year) {
-	*(date + 0) = month;
-	*(date + 1) = day;
-	*(date + 2) = year;
+	this->date = new int[3];
+	*(this->date + 0) = month;
+	*(this->date + 1) = day;
+	*(this->date + 2) = year;
 }
 
-int Date::compare(Date other) {
-	int *date2 = other.getDate();
-	if(*(date+0))
-	return 0;
+void Date::setDate(const int *date) {
+	this->date = new int[3];
+	*(this->date + 0) = date[0];
+	*(this->date + 1) = date[1];
+	*(this->date + 2) = date[2];
 }
 
-std::string Date::toString() {
+std::string Date::toString() const{
 	std::string str = "";
 	if (*(date + 0) < 10)
 		str.append("0");
