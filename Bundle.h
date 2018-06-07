@@ -8,7 +8,12 @@ private:
 	Book *buffer;
 	int arraySize;
 	int arrayMax;
+
+	void shuffle(int index, int num);
+	void swap(Book &book1, Book &book2);
+	int findPos(Book book);
 public:
+	Bundle();
 	Bundle(int expectedMax);
 	Bundle(const Bundle &src);
 	~Bundle();

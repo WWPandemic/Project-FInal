@@ -1,6 +1,13 @@
 #include <iostream>
 #include "Bundle.h"
 
+
+Bundle::Bundle() {
+	this->arrayMax = 5;
+	buffer = new Book[arrayMax];
+	arraySize = 0;
+}
+
 Bundle::Bundle(int expectedMax) {
 	this->arrayMax = expectedMax;
 	buffer = new Book[arrayMax];
@@ -35,7 +42,9 @@ int Bundle::getSize() const {
 
 void Bundle::addBook(Book b) {
 	ensureSize(arraySize + 1);
-	*(buffer + arraySize) = b;
+	int pos = findPos(b);
+	shuffle(pos, 1);
+	swap(b, *(buffer + pos));
 	arraySize++;
 }
 
@@ -85,11 +94,40 @@ void Bundle::printAll() {
 		std::cout << (buffer + i)->toString() << std::endl;
 }
 
+void Bundle::shuffle(int index, int num) {
+	if (index != arraySize) {
+		ensureSize(arraySize + num);
+		if (num > 0) {
+			for (int i = 0; i < num; i++)
+				swap(*(buffer + i + index), *(buffer + i + arraySize));
+			arraySize += num;
+		}
+		if (num < 0) {
+			for (int i = 0; i < num; i++)
+				swap(*(buffer + i + index), *(buffer + i + num));
+			arraySize -= num;
+		}
+	}
+}
+
+void Bundle::swap(Book &book1, Book &book2) {
+	Book temp = book1;
+	book1 = book2;
+	book2 = temp;
+}
+
+int Bundle::findPos(Book book) {
+	int pos = arraySize;
+	int min = 0;
+	int max = arraySize;
+	return pos;
+}
+
 bool Bundle::ensureSize(int size) {
 	if (size >= arrayMax) {
 		Book *buffer2 = new Book[size];
 		for (int i = 0; i < arraySize; i++)
-			*(buffer2 + i) = *(buffer + i);
+			swap(*(buffer2 + i),*(buffer + i));
 		delete []buffer;
 		buffer = buffer2;
 		return false;
