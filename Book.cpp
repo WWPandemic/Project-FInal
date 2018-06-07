@@ -2,9 +2,9 @@
 #include "Book.h"
 
 Book::Book() {
-	this->title = "";
-	this->author = "";
-	this->publisher = "";
+	this->title = "*";
+	this->author = "*";
+	this->publisher = "*";
 	this->ISBN = 0;
 	this->dateAdded = Date();
 	this->quantityOnHand = 0;
@@ -27,6 +27,34 @@ std::ostream& operator<<(std::ostream& os, const Book& b) {
 	Book book = b;
 	os << book.toString();
 	return os;
+}
+
+std::istream& operator>>(std::istream& is, const Book& b) {
+	return is;
+}
+
+bool operator==(const Book &book1, const Book &book2) {
+
+}
+
+bool operator!=(const Book &book1, const Book &book2) {
+
+}
+
+bool operator<(const Book &book1, const Book &book2) {
+
+}
+
+bool operator<=(const Book &book1, const Book &book2) {
+
+}
+
+bool operator>(const Book &book1, const Book &book2) {
+
+}
+
+bool operator>=(const Book &book1, const Book &book2) {
+
 }
 
 std::string Book::getTitle() const{
