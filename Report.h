@@ -1,29 +1,24 @@
 #pragma once
 #include "Menu.h"
-#include <iostream>
 
 class Report : public Menu
 {
 private:
 	//outputIntroduction unmodified
-	void getInput()
-	{
-		do
-		{
-			std::cout << "What would you like to do?" << std::endl;
-			std::string input;
-			getline(std::cin, input);
-			chosenOption = std::stoi(input);
-		} while (chosenOption < 0 || chosenOption > 7);
-	}
-	void runOptions()
-	{
-		//needs bundle.cpp to be built before developement
-		isUsingMenu = false;
-	}
+	void getInput();
+	void runOptions();
+
+	//options of the report menu
+	void showInventoryList(Bundle b);
+	void showWholesaleList();
+	void showRetailList();
+	void showQuantityList();
+	void showCostList();
+	void showAgeList();
 public:
-	Report()
+	Report(Bundle b)
 	{
+		menuBooks = b;
 		chosenOption = 7;//defaults to main menu
 		introductions = new std::string[]
 		{
@@ -54,3 +49,4 @@ public:
 		};
 	}
 };
+

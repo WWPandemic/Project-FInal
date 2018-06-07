@@ -1,5 +1,7 @@
 #pragma once
+#include "Bundle.h"
 #include <string>
+#include <iostream>
 
 class Menu
 {
@@ -8,7 +10,7 @@ private:
 	{
 		for (int ind = 0; ind < introductions->length; ind++)
 		{
-			cout << introductions[ind] << endl;
+			std::cout << introductions[ind] << std::endl;
 		}
 	}
 	void getInput();
@@ -17,6 +19,7 @@ protected:
 	bool isUsingMenu;
 	int chosenOption;
 	std::string* introductions;
+	Bundle menuBooks;
 public:
 	Menu();
 	~Menu();

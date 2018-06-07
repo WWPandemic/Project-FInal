@@ -1,6 +1,5 @@
 #pragma once
 #include "Menu.h"
-#include <iostream>
 
 class MainMenu : public Menu
 {
@@ -21,6 +20,9 @@ private:
 		//needs bundle.cpp to be built before developement
 		isUsingMenu = false;
 	}
+	void useReportModule(Bundle b);
+	void useCashierModule();
+	void useInventoryModule();
 public:
 	MainMenu()
 	{
