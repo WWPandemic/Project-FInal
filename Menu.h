@@ -6,30 +6,17 @@
 class Menu
 {
 private:
-	void outputIntroduction()
-	{
-		for (int ind = 0; ind < introductions->length; ind++)
-		{
-			std::cout << introductions[ind] << std::endl;
-		}
-	}
-	void getInput();
-	void runOptions();
+	virtual void outputIntroduction();
+	virtual void getInput();
+	virtual void runOptions();
 protected:
 	bool isUsingMenu;
 	int chosenOption;
-	std::string* introductions;
+	std::string introductions[100];
+	int usedIntroLines;
 	Bundle menuBooks;
 public:
 	Menu();
 	~Menu();
-	void runMenu()
-	{
-		do
-		{
-			outputIntroduction();
-			getInput();
-			runOptions();
-		} while (isUsingMenu);
-	}
+	void runMenu();
 };
