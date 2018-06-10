@@ -6,18 +6,21 @@ Bundle::Bundle() {
 	this->arrayMax = 5;
 	buffer = new Book[arrayMax];
 	arraySize = 0;
+	sortBy = 1;
 }
 
 Bundle::Bundle(int expectedMax) {
 	this->arrayMax = expectedMax;
 	buffer = new Book[arrayMax];
 	arraySize = 0;
+	sortBy = 1;
 }
 
 Bundle::Bundle(const Bundle &src) {
 	this->arrayMax = src.getSize();
 	buffer = new Book[arrayMax];
 	addBooks(src);
+	sortBy = 1;
 }
 
 Bundle::~Bundle() {
@@ -43,7 +46,9 @@ int Bundle::getSize() const {
 void Bundle::addBook(Book b) {
 	ensureSize(arraySize + 1);
 	int pos = findPos(b);
-	shuffle(pos, 1);
+	b.setSortBy(sortBy);
+	for (int i = arraySize; i >= pos; i--)
+		swap(*(buffer + i), *(buffer + i + 1));
 	swap(b, *(buffer + pos));
 	arraySize++;
 }
@@ -67,7 +72,18 @@ void Bundle::addBooks(Bundle books) {
 
 void Bundle::removeBook(int index) {
 	if (ensureIndex(index)) {
+		for (int i = index; i < arraySize - 1; i++)
+			swap(*(buffer + i), *(buffer + i + 1));
+			//std::cout << i << " " << i + 1 << std::endl;
+		arraySize--;
+	}
+}
 
+void Bundle::removeBooks(int minIndex, int maxIndex) {
+	if (ensureIndex(minIndex) && ensureIndex(maxIndex)) {
+		int dif = maxIndex - minIndex;
+		for (int i = 0; i <= dif; i++)
+			removeBook(minIndex);
 	}
 }
 
@@ -75,15 +91,14 @@ void Bundle::removeBooks(Bundle books) {
 
 }
 
-void Bundle::removeBooks(int minIndex, int maxIndex) {
-
-}
-
 void Bundle::removeAll() {
-	delete[]buffer;
-	buffer = new Book[arrayMax];
+	arraySize = 0;
 }
 
+void Bundle::removeAllAfter(int index) {
+	if (ensureIndex(index))
+		arraySize = index;
+}
 
 void Bundle::printBook(int index) {
 	std::cout << (buffer + index)->toString() << std::endl;
@@ -97,16 +112,14 @@ void Bundle::printAll() {
 void Bundle::shuffle(int index, int num) {
 	if (index != arraySize) {
 		ensureSize(arraySize + num);
-		if (num > 0) {
+		if (num > 0)
+			for (int i = arraySize; i >= index; i--)
+				swap(*(buffer + i), *(buffer + i + num));
+				//std::cout << i << " " << i + num << std::endl;
+		else if(num < 0)
 			for (int i = 0; i < num; i++)
-				swap(*(buffer + i + index), *(buffer + i + arraySize));
-			arraySize += num;
-		}
-		if (num < 0) {
-			for (int i = 0; i < num; i++)
-				swap(*(buffer + i + index), *(buffer + i + num));
-			arraySize -= num;
-		}
+				swap(*(buffer + arraySize - i), *(buffer));
+		arraySize += num;
 	}
 }
 

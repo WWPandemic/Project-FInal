@@ -15,6 +15,12 @@ public:
 
 	Date operator=(const Date &);
 	friend std::ostream& operator<<(std::ostream& os, const Date& dt);
+	friend bool operator==(const Date& dt1, const Date& dt2);
+	friend bool operator!=(const Date& dt1, const Date& dt2);
+	friend bool operator<(const Date& dt1, const Date& dt2);
+	friend bool operator<=(const Date& dt1, const Date& dt2);
+	friend bool operator>(const Date& dt1, const Date& dt2);
+	friend bool operator>=(const Date& dt1, const Date& dt2);
 	
 	const int *getDate() const;
 	void setDate(int date[3]);

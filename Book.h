@@ -13,6 +13,7 @@ protected:
 	int quantityOnHand;
 	double wholesaleCost;
 	double retailPrice;
+	int sortBy;
 public:
 	Book();
 	Book(std::string title, std::string author, std::string publisher, int ISBN, Date dateAdded, int quantityOnHand, double wholesaleCost, double retailPrice);
@@ -34,16 +35,17 @@ public:
 	int getQuantityOnHand() const;
 	double getWholesaleCost() const;
 	double getRetailPrice() const;
+	int getSortBy() const;
 
 	void setTitle(std::string title);
 	void setAuthor(std::string author);
 	void setPublisher(std::string publisher);
 	void setISBN(int ISBN);
 	void setDate(Date date);
-	void getQuantityOnHand(int quantityOnHand);
-	void getWholesaleCost(double wholesaleCost);
-	void getRetailPrice(double retailPrice);
-
+	void setQuantityOnHand(int quantityOnHand);
+	void setWholesaleCost(double wholesaleCost);
+	void setRetailPrice(double retailPrice);
+	void setSortBy(int sortBy);
 
 
 	std::string toString() const;

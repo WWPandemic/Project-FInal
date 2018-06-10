@@ -32,6 +32,64 @@ std::ostream& operator<<(std::ostream& os, const Date& dt) {
 	return os;
 }
 
+bool operator==(const Date& dt1, const Date& dt2) {
+	const int *date1 = dt1.getDate(), *date2 = dt2.getDate();
+	if (*(date1 + 0) == *(date2 + 0) && *(date1 + 1) == *(date2 + 1) && *(date1 + 2) == *(date2 + 2))
+		return true;
+	return false;
+}
+
+bool operator!=(const Date& dt1, const Date& dt2) {
+	const int *date1 = dt1.getDate(), *date2 = dt2.getDate();
+	if (*(date1 + 0) != *(date2 + 0) || *(date1 + 1) != *(date2 + 1) || *(date1 + 2) != *(date2 + 2))
+		return true;
+	return false;
+}
+
+bool operator<(const Date& dt1, const Date& dt2) {
+	if (dt1 != dt2) {
+		const int *date1 = dt1.getDate(), *date2 = dt2.getDate();
+		if (*(date1 + 2) < *(date2 + 2))
+			return true;
+		else if (*(date1 + 2) == *(date2 + 2)) {
+			if (*(date1 + 0) < *(date2 + 0))
+				return true;
+			else if (*(date1 + 0) == *(date2 + 0))
+				if (*(date1 + 1) < *(date2 + 1))
+					return true;
+		}
+	}
+	return false;
+}
+
+bool operator<=(const Date& dt1, const Date& dt2) {
+	if (dt1 == dt2 || dt1 < dt2)
+		return true;
+	return false;
+}
+
+bool operator>(const Date& dt1, const Date& dt2) {
+	if (dt1 != dt2) {
+		const int *date1 = dt1.getDate(), *date2 = dt2.getDate();
+		if (*(date1 + 2) > *(date2 + 2))
+			return true;
+		else if (*(date1 + 2) == *(date2 + 2)) {
+			if (*(date1 + 0) > *(date2 + 0))
+				return true;
+			else if (*(date1 + 0) == *(date2 + 0))
+				if (*(date1 + 1) > *(date2 + 1))
+					return true;
+		}
+	}
+	return false;
+}
+
+bool operator>=(const Date& dt1, const Date& dt2) {
+	if (dt1 == dt2 || dt1 > dt2)
+		return true;
+	return false;
+}
+
 const int *Date::getDate() const {
 	return date;
 }

@@ -8,11 +8,14 @@ private:
 	Book *buffer;
 	int arraySize;
 	int arrayMax;
-
+	int sortBy;
+	
+	int findPos(Book book);
+	void sort();
+public:
 	void shuffle(int index, int num);
 	void swap(Book &book1, Book &book2);
-	int findPos(Book book);
-public:
+
 	Bundle();
 	Bundle(int expectedMax);
 	Bundle(const Bundle &src);
@@ -28,13 +31,16 @@ public:
 	void addBooks(Bundle books);
 
 	void removeBook(int index);
-	void removeBooks(Bundle books);
 	void removeBooks(int minIndex, int maxIndex);
+	void removeBooks(Bundle books);
 	void removeAll();
+	void removeAllAfter(int index);
 
 	void printBook(int index);
 	void printAll();
 
 	bool ensureSize(int size);
 	bool ensureIndex(int index);
+
+	void sortByProperty(int propertyNum);
 };

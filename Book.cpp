@@ -10,6 +10,7 @@ Book::Book() {
 	this->quantityOnHand = 0;
 	this->wholesaleCost = 0;
 	this->retailPrice = 0;
+	this->sortBy = 1;
 }
 
 Book::Book(std::string title, std::string author, std::string publisher, int ISBN, Date dateAdded, int quantityOnHand, double wholesaleCost, double retailPrice) {
@@ -21,6 +22,7 @@ Book::Book(std::string title, std::string author, std::string publisher, int ISB
 	this->quantityOnHand = quantityOnHand;
 	this->wholesaleCost = wholesaleCost;
 	this->retailPrice = retailPrice;
+	this->sortBy = 1;
 }
 
 std::ostream& operator<<(std::ostream& os, const Book& b) {
@@ -34,27 +36,35 @@ std::istream& operator>>(std::istream& is, const Book& b) {
 }
 
 bool operator==(const Book &book1, const Book &book2) {
-
+	if (book1.getTitle() == book2.getTitle())
+		if (book1.getAuthor() == book2.getAuthor())
+			if(book1.getPublisher() == book2.getPublisher())
+				if(book1.getDateAdded() == book2.getDateAdded())
+					if(book1.getQuantityOnHand() == book1.getQuantityOnHand())
+						if(book1.getWholesaleCost() == book2.getWholesaleCost())
+							if(book1.getRetailPrice() == book2.getRetailPrice())
+								return true;
+	return false;
 }
 
 bool operator!=(const Book &book1, const Book &book2) {
-
+	return true;
 }
 
 bool operator<(const Book &book1, const Book &book2) {
-
+	return true;
 }
 
 bool operator<=(const Book &book1, const Book &book2) {
-
+	return true;
 }
 
 bool operator>(const Book &book1, const Book &book2) {
-
+	return true;
 }
 
 bool operator>=(const Book &book1, const Book &book2) {
-
+	return true;
 }
 
 std::string Book::getTitle() const{
@@ -87,6 +97,46 @@ double Book::getWholesaleCost() const{
 
 double Book::getRetailPrice() const{
 	return retailPrice;
+}
+
+int Book::getSortBy() const {
+	return sortBy;
+}
+
+void Book::setTitle(std::string title) {
+	this->title = title;
+}
+
+void Book::setAuthor(std::string author) {
+	this->author = author;
+}
+
+void Book::setPublisher(std::string publisher) {
+	this->publisher = publisher;
+}
+
+void Book::setISBN(int ISBN) {
+	this->ISBN = ISBN;
+}
+
+void Book::setDate(Date date) {
+	this->dateAdded = date;
+}
+
+void Book::setQuantityOnHand(int quantityOnHand) {
+	this->quantityOnHand = quantityOnHand;
+}
+
+void Book::setWholesaleCost(double wholesaleCost) {
+	this->wholesaleCost = wholesaleCost;
+}
+
+void Book::setRetailPrice(double retailPrice) {
+	this->retailPrice = retailPrice;
+}
+
+void Book::setSortBy(int sortBy) {
+	this->sortBy = sortBy;
 }
 
 std::string Book::toString() const{
