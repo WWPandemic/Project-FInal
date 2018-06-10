@@ -34,23 +34,22 @@ public:
 	Inventory()
 	{
 		chosenOption = 5;//defaults to main menu
-		introductions = new std::string[]
-		{
-			"---------------------------------------------------------------------------",
-			"                     Welcome to the Inventory Module:",
-			"This module allows you to look at the books inventory",
-			"And all change information related to the inventory",
-			"You can use this module to:",
-			"1 - Look Up Books",
-			"   Use a name or the ISBN of a book to find its information",
-			"2 - Add New Books",
-			"    Enter all information relating to a book and add it to the inventory",
-			"3 - Delete Books",
-			"    Find and remove any books from the inventory",
-			"4 - Change informations",
-			"    Find any book and edit its information",
-			"5 - Go back to main menu",
-			"---------------------------------------------------------------------------"
-		};
+		 
+		introductions[0] =	"---------------------------------------------------------------------------",
+		introductions[1] =	"                     Welcome to the Inventory Module:",
+		introductions[2] =	"This module allows you to look at the books inventory",
+		introductions[3] =	"And all change information related to the inventory",
+		introductions[4] =	"You can use this module to:",
+		introductions[5] =	"1 - Look Up Books",
+		introductions[6] =	"   Use a name or the ISBN of a book to find its information",
+		introductions[7] =	"2 - Add New Books",
+		introductions[8] =	"    Enter all information relating to a book and add it to the inventory",
+		introductions[9] =	"3 - Delete Books",
+		introductions[10] =	"    Find and remove any books from the inventory",
+		introductions[11] =	"4 - Change informations",
+		introductions[12] =	"    Find any book and edit its information",
+		introductions[13] =	"5 - Go back to main menu",
+		introductions[14] =	"---------------------------------------------------------------------------"
+		usedIntroLines = 15;
 	};
 };
