@@ -1,0 +1,25 @@
+To Kill a MockingBird;Harper Lee;Random House;0061120081;12312000;5;6.25;9.39
+Romeo and Juliet;William Shakespeare;Washington Square Press;0743477111;06061998;7;3.5;5.99
+The Great Gatsby;F. Scott Fitzgerald;Scribner;0743273567;05232001;4;6.5;9
+Lord of the Flies;William Golding;Penguin Books;0140283331;08111999;3;5;7.8
+Macbeth;William Shakespeare;Simon Schuster;0743477103;07012003;11;3;5.39
+Animal Farm;George Orwell;NAL;0452284244;05062003;3;7.5;10.25
+The Catcher in the Rye;J.D. Salinger;Back Bay Books;0316769177;01302001;6;8;9.5
+Of Mice and Men;John Steinbeck;Penguin Books;0142000671;01082002;1;5;8.99
+Hamlet;William Shakespeare;Cambridge University Press;0521618746;08012005;21;0.85;3.9
+The Scarlet Letter;Nathaniel Hawthorne;Penguin Books;0142437263;02272003;6;6.4;9.85
+The Adventures of Huckleberry Finn;Mark Twain;Penguin Classics;0142437174;12312002;19;0.95;3.25
+1984;George Orwell;New American Library;0451524934;07011995;8;5.5;7.5
+The Odyssey;Homer;Penguin Classics;0143039954;11302006;9;6.2;8.4
+Pride and Prejudice;Jane Austen;Modern Library;0679783261;10102000;14;4.5;7.5
+Jane Eyre;Charlotte Brontë;Penguin Classics;0142437204;02042003;8;2.5;4.76
+The Giver;Lois Lowry;Ember;0385732554;01242006;5;2;5
+Fahrenheit 451;Ray Bradbury;DeBolsillo;0307347974;10212004;8;6.2;8.97
+Brave New World;Aldous Huxley;Perennial Classics;0060929871;09011998;6;3;5.45
+The Crucible;Arthur Miller;Penguin Classics;0142437336;05252003;9;7.5;10.2
+The Grapes of Wrath;John Steinbeck;Viking;0670016918;04102000;13;8;10.7
+The Old Man and the Sea;Ernest Hemingway;Scribner;0684830493;09011996;8;6;9.1
+Oliver Twist;Charles Dickens;Penguin Books;0141439742;02212003;6;6;8
+The Tempest;William Shakespeare;Simon Schuster;0743482832;07012004;7;5;7.96
+Frankenstein;Mary Wollstonecraft Shelley;Penguin Books;0141439475;04202003;7;6.5;8.29
+A Tale of Two Cities;Charles Dickens;Penguin Books;0141439602;07102003;9;5;6.4

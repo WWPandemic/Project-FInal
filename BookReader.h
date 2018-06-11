@@ -8,26 +8,17 @@ class BookReader
 private:
 	std::ifstream inFile;
 	std::ofstream outFile;
+	std::string* splitInfo(std::string*, std::string, int);		// Splits bookInfo into an array of strings
+	std::string stringISBN(int);			// Convert isbn back to string and conserve 0's
+	std::string stringDate(Date);			// Convert date object back to string
 
 public:
 	// Constructor/Destructor
 	BookReader();
 	~BookReader();
 
-	// Accessor/Mutator
-	//std::ifstream getInFile();
-	//std::ofstream getOutFile();
-	//void setInFile(std::string);
-	//void setOutFile(std::string);
-
 	// Functions
-	Book* createBundle();			// Creates bundle from input file	**** (replace Book* with Bundle) ****
-	void exportBundle(Bundle);				// Sends bundle to output file
-	std::string* splitInfo(std::string*, std::string, int);		// Split bookInfo into an array of strings
-};
+	Bundle createBundle();				// Creates bundle from input file
+	void exportBundle(Bundle);			// Sends bundle to output file
 
-/*
-Main functions of BookReader:
-1. Create Bundle from input file
-2. Create output file from Bundle
-*/
+};
