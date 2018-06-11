@@ -10,10 +10,12 @@ private:
 	double totalProfit;				// Total profit of ShoppingCart
 	double amountPaid;				// Total paid by customer
 	double change;					// Change owed to customer
+	bool completeCart;				// If cart is valid or not
 
 public:
 	// Constructors
 	ShoppingCart();
+	ShoppingCart(Bundle);
 
 	// Accessors
 	double getSubtotal() const;				// Return subtotal
@@ -22,6 +24,7 @@ public:
 	double getAmountPaid() const;			// Return amountPaid
 	double getChange() const;				// Return change
 	double getTax() const;					// Return tax amount
+	bool getComplete() const;				// Return complete cart status
 
 	// Mutators
 	void addSubtotal(double c);			// Add amount to subtotal
@@ -30,4 +33,10 @@ public:
 	void calculateChange();				// Calculate change
 	void processPay();					// Input value for amountPaid
 
+	// Functions
+	void addItems(Bundle);				// Add items to cart
+	int searchISBN(Bundle, int);		// Search main bundle for isbn
+	void processTotals();				// Calculate all total values
+	void validateCart();				// Validate status of cart
+	void printAll();					// Print all books in cart
 };
