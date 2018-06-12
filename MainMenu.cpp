@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "MainMenu.h"
 #include "Report.h"
 #include "CashRegister.h"
@@ -24,18 +25,18 @@ void MainMenu::runOptions()
 
 void MainMenu::useReportModule(Bundle b)
 {
-	std::cout << "Now the program will DIE IN A FIRE" << std::endl;
 	Report reportMenu = Report(menuBooks);
 	reportMenu.runMenu();
 
 }
 void MainMenu::useCashierModule(Bundle b)
 {
-	CashRegister cashRegister = CashRegister();
-	//cashRegister.
+	CashRegister cashRegister = CashRegister(menuBooks);
+	cashRegister.runMenu();
 
 }
 void MainMenu::useInventoryModule(Bundle b)
 {
-	Inventory inventory = Inventory();
+	Inventory inventory = Inventory(menuBooks);
+	inventory.runMenu();
 }
