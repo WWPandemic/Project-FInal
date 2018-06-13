@@ -16,6 +16,7 @@ public:
 	// Constructors
 	ShoppingCart();
 	ShoppingCart(Bundle);
+	~ShoppingCart();
 
 	// Accessors
 	double getSubtotal() const;				// Return subtotal
@@ -27,14 +28,15 @@ public:
 	bool getComplete() const;				// Return complete cart status
 
 	// Mutators
-	void addSubtotal(double c);			// Add amount to subtotal
-	void addTotalProfit(double p);		// Add amount to totalProfit
+	void addSubtotal(double);			// Add amount to subtotal
+	void addTotalProfit(double);		// Add amount to totalProfit
 	void calculateTotal();				// Calculate totalCost
 	void calculateChange();				// Calculate change
 	void processPay();					// Input value for amountPaid
 
 	// Functions
 	void addItems(Bundle);				// Add items to cart
+	void sortISBN(Bundle);				// Sort bundle by isbn
 	int searchISBN(Bundle, int);		// Search main bundle for isbn
 	void processTotals();				// Calculate all total values
 	void validateCart();				// Validate status of cart

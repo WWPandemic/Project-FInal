@@ -85,7 +85,7 @@ Bundle BookReader::createBundle()				// Creates bundle from input file
 	std::string bookInfo;			// All book info in a single string
 	Bundle bundle(30);				// Created bundle with expected max of 30
 
-									// Read each line, separate into variables and create a new book
+	// Read each line, separate into variables and create a new book
 	while (std::getline(inFile, bookInfo))
 	{
 		//Split bookInfo into an array of strings
@@ -99,6 +99,7 @@ Bundle BookReader::createBundle()				// Creates bundle from input file
 		// Add book to bundle
 		bundle.addBook(info[0], info[1], info[2], stoi(info[3]), date, stoi(info[5]), stod(info[6]), stod(info[7]));
 
+		// Check bundle size
 		bundle.ensureSize(bundle.getSize());
 	}
 
@@ -139,11 +140,3 @@ void BookReader::exportBundle(Bundle bundle)			// Sends bundle to output file
 
 	outFile.close();
 }
-
-
-
-/*
-To do:
-- create operator for << and >>
-- exportBundle function
-*/

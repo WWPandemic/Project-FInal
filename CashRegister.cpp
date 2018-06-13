@@ -157,7 +157,7 @@ void CashRegister::refundBook(Bundle b)					// Refund a book
 		std::cin >> userISBN;
 
 		// Search mainbundle for userISBN
-		int pos = searchISBN(b, userISBN);		// **temp**
+		int pos = searchISBN(b, userISBN);	
 		if (pos >= 0) {
 			Book *currentSearch = b.getBundle();
 			std::cout << "\n";
@@ -184,18 +184,45 @@ void CashRegister::refundBook(Bundle b)					// Refund a book
 	} while (repeat == "y" || repeat == "Y");
 }
 
+void CashRegister::sortISBN(Bundle b)				// Sort main bundle by isbn
+{
+	Book *bundle = b.getBundle();
+	double total = 0;
+
+	for (int ind = 0; ind < b.getSize(); ind++)
+	{
+		int minISBN = (*bundle).getISBN();
+		int swapInd = ind;
+		for (int target = ind; target < b.getSize(); target++)
+		{
+			if ((*bundle).getISBN() < minISBN)
+			{
+				swapInd = target;
+				minISBN = (*bundle).getISBN();
+			}
+		}
+		if (swapInd != ind)
+		{
+			Book temp = *(bundle + ind);
+			*(bundle + ind) = *(bundle + swapInd);
+			*(bundle + swapInd) = temp;
+		}
+	}
+}
+
 int CashRegister::searchISBN(Bundle b, int search)		// Search main bundle for isbn, returns index position or -1
 {
-	// *temp binary search, need sort*
 	Book *bundle = b.getBundle();
 	int first = 0;
 	int last = b.getSize();
 	int mid = 0;
 
+	sortISBN(b);
+
 	while (first <= last) {
 		mid = (first + last) / 2;
 		if ((bundle + mid)->getISBN() == search) {
-			return mid;
+			return mid;		// If found, return index
 		}
 		else {
 			if ((bundle + mid)->getISBN() > search) {
