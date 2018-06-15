@@ -1,20 +1,23 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include "BookReader.h"
-#include "MainMenu.h"
+#include <iostream>
+#include <string>
+#include "Bundle.h"
 
 using namespace std;
 
-int main()
-{
-	BookReader reader;
-	Bundle b = reader.createBundle();
-	//implement reading bundle from samplebooks.txt
-	MainMenu mainmenu(b);
-	mainmenu.runMenu();
+int main() {
+	Date testDate1(6, 5, 2018);
 
-	reader.exportBundle(b);
+	Book testBook1("0", "0", "0", 1, testDate1, 2, 1, 1);
+	
+	Bundle testBundle(25);
+	//cout << testBundle[0] << endl;
+	testBundle[0] = testBook1;
+	//Bundle testBundle2 = testBundle;
+	//cout << testBundle2[0] << endl;
+	//testBundle.printAll();
 
-	cout << "Please press  the <Enter> key to exit" << endl;
+	cout << "Please press the <Enter> key to exit" << endl;
 	cin.get();
 	return 0;
 }
