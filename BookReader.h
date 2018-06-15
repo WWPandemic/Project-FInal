@@ -18,7 +18,7 @@ public:
 	~BookReader();
 
 	// Functions
-	Bundle createBundle();				// Creates bundle from input file
+	void createBundle(Bundle);			// Creates bundle from input file
 	void exportBundle(Bundle);			// Sends bundle to output file
 
 };
