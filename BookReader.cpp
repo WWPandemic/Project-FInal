@@ -103,10 +103,10 @@ std::string BookReader::stringDate(Date date)
 }
 
 // Creates bundle from input file
-Bundle BookReader::createBundle()
+void BookReader::createBundle(Bundle &b)
 {
 	std::string bookInfo;			// All book info in a single string
-	Bundle bundle(25);				// Create bundle
+	int count = 0;							// Number of books
 
 	// Read each line, separate into variables and create a new book
 	while (getline(inFile, bookInfo))
@@ -115,21 +115,18 @@ Bundle BookReader::createBundle()
 		const int PARAM = 8;					// Number of book parameters
 		std::string info[PARAM];				// Array to store book info in
 		splitInfo(info, bookInfo, PARAM);		// Call function to split bookInfo into array
-		int count = 0;							// Number of books
 
 		// Convert date info into Date object
 		Date date(stoi(info[4].substr(0, 2)), stoi(info[4].substr(2, 2)), stoi(info[4].substr(4, 4)));
 
 		// Add book to bundle, add one to count
-		bundle[count++] = Book(info[0], info[1], info[2], stoi(info[3]), date, stoi(info[5]), stod(info[6]), stod(info[7]));
+		b[count++] = Book(info[0], info[1], info[2], stoi(info[3]), date, stoi(info[5]), stod(info[6]), stod(info[7]));
 
 		// Check bundle size
-		if (count >= bundle.getLength()) {
+		if (count >= b.getLength()) {
 			//bundle.getArray().reSize(count + 1);
 		}
 	}
-
-	return bundle;
 }
 
 //// **temp**
