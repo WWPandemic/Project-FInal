@@ -18,7 +18,9 @@ public:
 	~BookReader();
 
 	// Functions
-	void createBundle(Bundle);			// Creates bundle from input file
+	void setInFile();					// Get input file from user and open
+	void openInputFile(std::string);	// Open file with exception handling
+	Bundle createBundle();				// Creates bundle from input file
 	void exportBundle(Bundle);			// Sends bundle to output file
 
 };

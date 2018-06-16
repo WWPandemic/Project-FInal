@@ -10,20 +10,7 @@
 
 BookReader::BookReader()
 {
-	std::cout << "Creating book inventory data, please enter the file path location ...\n";
-	do {
-		std::string userInFile;
-		std::cout << "Input File: ";
-		getline(std::cin, userInFile);			// User enters input file location
-		inFile.open(userInFile);
-		
-		if (!inFile) {			// Validate input file
-			std::cout << "Could not find the specified file, please try again.\n\n";
-		}
-		else {
-			std::cout << "File successfully opened!\n\n";
-		}
-	} while (!inFile);
+	setInFile();
 }
 
 BookReader::~BookReader()
@@ -35,7 +22,40 @@ BookReader::~BookReader()
 //* Function definitions *
 //************************
 
-std::string* BookReader::splitInfo(std::string* splitInfo, std::string bookInfo, int size)		// Splits bookInfo into an array of strings
+// Get input file from user and open
+void BookReader::setInFile()
+{
+	std::cout << "Creating book inventory data, please enter the file path location ...\n";
+	do {
+		std::string userInFile;
+		std::cout << "Input File: ";
+		getline(std::cin, userInFile);
+
+		try
+		{
+			openInputFile(userInFile);
+			std::cout << "File successfully opened!\n\n";
+		}
+		catch (std::string fileException)
+		{
+			std::cout << fileException << std::endl << std::endl;
+		}
+	} while (!inFile);
+}
+
+// Open file with exception handling
+void BookReader::openInputFile(std::string file)
+{
+	inFile.open(file);
+
+	if (!inFile) {
+		std::string fileException = "Could not find the specified file, please try again.";
+		throw fileException;
+	}
+}
+
+// Splits bookInfo into an array of strings
+std::string* BookReader::splitInfo(std::string* splitInfo, std::string bookInfo, int size)
 {
 	int start = 0;
 	int end = 0;
@@ -52,7 +72,8 @@ std::string* BookReader::splitInfo(std::string* splitInfo, std::string bookInfo,
 	return splitInfo;
 }
 
-std::string BookReader::stringISBN(int isbn)		// Convert isbn back to string and conserve 0's
+// Convert isbn back to string and conserve 0's
+std::string BookReader::stringISBN(int isbn)
 {
 	std::string newisbn = "";
 	if (isbn < 100000000) {	
@@ -67,7 +88,8 @@ std::string BookReader::stringISBN(int isbn)		// Convert isbn back to string and
 	return newisbn;
 }
 
-std::string BookReader::stringDate(Date date)		// Convert date object back to string
+// Convert date object back to string
+std::string BookReader::stringDate(Date date)
 {
 	std::string str = "";
 	if (date[0] < 10)
@@ -80,12 +102,14 @@ std::string BookReader::stringDate(Date date)		// Convert date object back to st
 	return str;
 }
 
-void BookReader::createBundle(Bundle b)				// Creates bundle from input file
+// Creates bundle from input file
+Bundle BookReader::createBundle()
 {
 	std::string bookInfo;			// All book info in a single string
+	Bundle bundle(25);				// Create bundle
 
 	// Read each line, separate into variables and create a new book
-	while (std::getline(inFile, bookInfo))
+	while (getline(inFile, bookInfo))
 	{
 		//Split bookInfo into an array of strings
 		const int PARAM = 8;					// Number of book parameters
@@ -97,11 +121,15 @@ void BookReader::createBundle(Bundle b)				// Creates bundle from input file
 		Date date(stoi(info[4].substr(0, 2)), stoi(info[4].substr(2, 2)), stoi(info[4].substr(4, 4)));
 
 		// Add book to bundle, add one to count
-		b[count++] = Book(info[0], info[1], info[2], stoi(info[3]), date, stoi(info[5]), stod(info[6]), stod(info[7]));
+		bundle[count++] = Book(info[0], info[1], info[2], stoi(info[3]), date, stoi(info[5]), stod(info[6]), stod(info[7]));
 
 		// Check bundle size
-		//bundle.ensureSize(bundle.getSize());
+		if (count >= bundle.getLength()) {
+			//bundle.getArray().reSize(count + 1);
+		}
 	}
+
+	return bundle;
 }
 
 //// **temp**
