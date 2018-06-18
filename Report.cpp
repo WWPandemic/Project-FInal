@@ -44,19 +44,20 @@ void Report::runOptions()
 }
 void Report::showInventoryList(Bundle books)
 {
+	Array<Book> b = books.getArray();
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		books.printAll();
+		std::cout << b[ind].toString() << std::endl;
 	}
 }
 void Report::showWholesaleList(Bundle books)
 {
-	Book *b = books.getBundle();
+	Array<Book> b = books.getArray();
 	double total = 0;
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		double d = (*b).getWholesaleCost();
-		std::cout << (*b).getTitle() + " " + (*b).getAuthor() + " " + (*b).getPublisher()
+		double d = b[ind].getCost();
+		std::cout << b[ind].getTitle() + " " + b[ind].getAuthor() + " " + b[ind].getPublisher()
 			<< " has wholesale cost of:" << d << std::endl;
 		total += d;
 	}
@@ -64,12 +65,12 @@ void Report::showWholesaleList(Bundle books)
 }
 void Report::showRetailList(Bundle books)
 {
-	Book *b = books.getBundle();
+	Array<Book> b = books.getArray();
 	double total = 0;
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		double d = (*b).getRetailPrice();
-		std::cout << (*b).getTitle() + " " + (*b).getAuthor() + " " + (*b).getPublisher()
+		double d = b[ind].getPrice();
+		std::cout << b[ind].getTitle() + " " + b[ind].getAuthor() + " " + b[ind].getPublisher()
 			<< " has the retail price of:" << d << std::endl;
 		total += d;
 	}
@@ -80,34 +81,34 @@ void Report::showQuantityList(Bundle books)
 	/*This method sorts a copy of the books by their quantity on hand
 	and prints a list of the books to the user
 	*/
-	Book *b = books.getBundle();
+	Array<Book> b = books.getArray();
 	double total = 0;
 
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		int minQuantity = (*b).getQuantityOnHand();
+		int minQuantity = b[ind].getQuantity();
 		int swapInd = ind;
 		for (int target = ind; target < books.getSize(); target++)
 		{
-			if ((*b).getQuantityOnHand() < minQuantity)
+			if (b[target].getQuantity() < minQuantity)
 			{
 				swapInd = target;
-				minQuantity = (*b).getQuantityOnHand();
+				minQuantity = b[target].getQuantity();
 			}
 		}
 		if (swapInd != ind)
 		{
-			Book temp = *(b + ind);
-			*(b + ind) = *(b + swapInd);
-			*(b + swapInd) = temp;
+			Book temp = b[ind];
+			b[ind] = b[swapInd];
+			b[swapInd] = temp;
 		}
 	}
 
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		double d = (*b).getQuantityOnHand();
+		double d = b[ind].getQuantity();
 		std::cout << "There are " << d << " copies of " << 
-			(*b).getTitle() + " " + (*b).getAuthor() + " " + (*b).getPublisher() << std::endl;
+			b[ind].getTitle() + " " + b[ind].getAuthor() + " " + b[ind].getPublisher() << std::endl;
 		total += d;
 	}
 	std::cout << "This makes a total of " << total << " books" << std::endl;
@@ -121,34 +122,34 @@ The books with the greatest wholesale cost will be listed first.
 */
 void Report::showCostList(Bundle books)
 {
-	Book *b = books.getBundle();
+	Array<Book> b = books.getArray();
 	double total = 0;
 
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		int minCost = (*b).getWholesaleCost();
+		int minCost = b[ind].getCost();
 		int swapInd = ind;
 		for (int target = ind; target < books.getSize(); target++)
 		{
-			if ((*b).getWholesaleCost() < minCost)
+			if (b[target].getCost() < minCost)
 			{
 				swapInd = target;
-				minCost = (*b).getWholesaleCost();
+				minCost = b[target].getCost();
 			}
 		}
 		if (swapInd != ind)
 		{
-			Book temp = *(b + ind);
-			*(b + ind) = *(b + swapInd);
-			*(b + swapInd) = temp;
+			Book temp = b[ind];
+			b[ind] = b[swapInd];
+			b[swapInd] = temp;
 		}
 	}
 
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		double d = (*b).getWholesaleCost();
+		double d = b[ind].getCost();
 		std::cout << "Wholesale cost of " << d << " for the book " << 
-			(*b).getTitle() + " " + (*b).getAuthor() + " " + (*b).getPublisher() <<  std::endl;
+			b[ind].getTitle() + " " + b[ind].getAuthor() + " " + b[ind].getPublisher() <<  std::endl;
 		total += d;
 	}
 	std::cout << "This adds to a total cost of " << total << "$" << std::endl;
@@ -156,37 +157,34 @@ void Report::showCostList(Bundle books)
 }
 void Report::showAgeList(Bundle books)
 {
-	Book *b = books.getBundle();
+	Array<Book> b = books.getArray();
 
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		Date newestDate = (*b).getDateAdded();
+		Date newestDate = b[ind].getDate();
 		int swapInd = ind;
 		for (int target = ind; target < books.getSize(); target++)
 		{
 			//DATE COMPARISON
-			if (((*b).getDateAdded().getDate() + 2) <= (newestDate.getDate() + 2)
-				&& ((*b).getDateAdded().getDate() + 0) <= (newestDate.getDate() + 0)
-				&& ((*b).getDateAdded().getDate() + 1) <= (newestDate.getDate() + 1)
-				)
+			if ( b[target].getDate() <= newestDate)
 			{
 				swapInd = target;
-				newestDate = (*b).getDateAdded();
+				newestDate = b[target].getDate();
 			}
 		}
 		if (swapInd != ind)
 		{
-			Book temp = *(b + ind);
-			*(b + ind) = *(b + swapInd);
-			*(b + swapInd) = temp;
+			Book temp = b[ind];
+			b[ind] = b[swapInd];
+			b[swapInd] = temp;
 		}
 	}
 
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		Date d = (*b).getDateAdded();
+		Date d = b[ind].getDate();
 		std::cout << "On the date " << d << " the book " <<
-			(*b).getTitle() + " " + (*b).getAuthor() + " " + (*b).getPublisher() << 
+			b[ind].getTitle() + " " + b[ind].getAuthor() + " " + b[ind].getPublisher() <<
 			" was added to the inventory" << std::endl;
 	}
 	sortAlphabetically(books);
@@ -195,24 +193,24 @@ void Report::showAgeList(Bundle books)
 void Report::sortAlphabetically(Bundle books)
 {
 	//sort back to alphabetical order
-	Book *b = books.getBundle();
+	Array<Book> b = books.getArray();
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		std::string smallestName = (*b).getTitle();
+		std::string smallestName = b[ind].getTitle();
 		int swapInd = ind;
 		for (int target = ind; target < books.getSize(); target++)
 		{
-			if ((*b).getTitle() < smallestName)
+			if (b[target].getTitle() < smallestName)
 			{
 				swapInd = target;
-				smallestName = (*b).getTitle();
+				smallestName = b[target].getTitle();
 			}
 		}
 		if (swapInd != ind)
 		{
-			Book temp = *(b + ind);
-			*(b + ind) = *(b + swapInd);
-			*(b + swapInd) = temp;
+			Book temp = b[ind];
+			b[ind] = b[swapInd];
+			b[swapInd] = temp;
 		}
 	}
 }
@@ -248,4 +246,3 @@ Report::Report(Bundle b)
 	introductions[23] = "---------------------------------------------------------------------------";
 	usedIntroLines = 24;
 }
-
