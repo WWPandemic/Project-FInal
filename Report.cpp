@@ -127,7 +127,7 @@ void Report::showCostList(Bundle books)
 
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		int minCost = b[ind].getCost();
+		double minCost = b[ind].getCost();
 		int swapInd = ind;
 		for (int target = ind; target < books.getSize(); target++)
 		{
