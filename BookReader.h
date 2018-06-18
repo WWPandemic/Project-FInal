@@ -21,7 +21,6 @@ public:
 	// Functions
 	void setInFile();					// Get input file from user and open
 	void openInputFile(std::string);	// Open file with exception handling
-	void createBundle(Bundle &b);		// Creates bundle from input file
-	void exportBundle(Bundle);			// Sends bundle to output file
-
+	void createBundle(Bundle &b);		// Create bundle from input file
+	void exportBundle(Bundle &b);		// Export bundle to output file
 };

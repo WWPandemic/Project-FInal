@@ -17,7 +17,7 @@ ShoppingCart::ShoppingCart()
 	completeCart = false;
 }
 
-ShoppingCart::ShoppingCart(Bundle mainBundle)
+ShoppingCart::ShoppingCart(Bundle b)
 {
 	subtotal = 0.0;
 	totalCost = 0.0;
@@ -25,165 +25,202 @@ ShoppingCart::ShoppingCart(Bundle mainBundle)
 	amountPaid = 0.0;
 	change = 0.0;
 
-	addItems(mainBundle);
+	addItems(b);
 	processTotals();
 	processPay();
 	calculateChange();
 	validateCart();
 }
 
-ShoppingCart::~ShoppingCart()
-{
-	delete [] getBundle();
-}
-
 //************************
 //* Accessor definitions *
 //************************
 
-double ShoppingCart::getSubtotal() const		// Return subtotal
+double ShoppingCart::getSubtotal() const		
 {
 	return subtotal;
 }
 
-double ShoppingCart::getTotalCost() const		// Return totalCost
+double ShoppingCart::getTotalCost() const		
 {
 	return totalCost;
 }
 
-double ShoppingCart::getTotalProfit() const		// Return totalProfit
+double ShoppingCart::getTotalProfit() const	
 {
 	return totalProfit;
 }
 
-double ShoppingCart::getAmountPaid() const		// Return amountPaid
+double ShoppingCart::getAmountPaid() const	
 {
 	return amountPaid;
 }
 
-double ShoppingCart::getChange() const		// Return change
+double ShoppingCart::getChange() const	
 {
 	return change;
 }
 
-double ShoppingCart::getTax() const		// Return tax amount
+bool ShoppingCart::getComplete() const
+{
+	return completeCart;
+}
+
+// Calculate and return tax amount
+double ShoppingCart::getTax() const		
 {
 	return subtotal * (TAX_RATE/100);
 }
 
-bool ShoppingCart::getComplete() const		// Return complete cart status
-{
-	return completeCart;
-}
+
 
 //***********************
 //* Mutator definitions *
 //***********************
 
-void ShoppingCart::addSubtotal(double c)			// Add amount to subtotal
+// Add amount to subtotal
+void ShoppingCart::addSubtotal(double c)			
 {
 	subtotal += c;
 }
 
-void ShoppingCart::addTotalProfit(double p)			// Add amount to totalProfit
+// Add amount to totalProfit
+void ShoppingCart::addTotalProfit(double p)			
 {
 	totalProfit += p;
 }
 
-void ShoppingCart::calculateTotal()					// Calculate totalCost
+// Calculate totalCost
+void ShoppingCart::calculateTotal()					
 {
 	totalCost = subtotal + getTax();
 }
 
-void ShoppingCart::calculateChange()				// Calculate change
+// Calculate change
+void ShoppingCart::calculateChange()				
 {
 	change = amountPaid - totalCost;
 }
 
-void ShoppingCart::processPay()						// Input value for amountPaid
+// Input value for amountPaid
+void ShoppingCart::processPay()						
 {
-	double x;
-	std::cout << "\nEnter the amount paid: $";	// Needs validation
-	std::cin >> x;
+	double paid;
+	std::cout << std::setprecision(2) << std::fixed;
+	std::cout << "The total is: $" << getTotalCost() << std::endl;
+	std::cout << "Enter the amount paid: $";	// Needs validation
+	std::cin >> paid;
+	std::cin.ignore();
 	std::cout << std::endl;
 	
-	amountPaid = x;
+	amountPaid = paid;
 }
 
 //************************
 //* Function definitions *
 //************************
 
-void ShoppingCart::addItems(Bundle mainBundle) {		// Add items to cart
-	std::string repeat = "";
+// Get confirmation
+std::string ShoppingCart::getConfirmation() {
+	std::string input;
+	getline(std::cin, input);
+	return input;
+}
+
+// Add items to cart
+void ShoppingCart::addItems(Bundle b) {			
+	int count = 0;
+	std::string repeat;
+
 	std::cout << "Please enter Book ISBNs to add items to the cart.\n";
 	do {
 		int userISBN;
 		std::cout << "ISBN: ";
 		std::cin >> userISBN;
+		std::cin.ignore();
+		std::cout << std::endl;
 
-		// Search mainbundle for userISBN
-		int pos = searchISBN(mainBundle, userISBN);
+		// Search main bundle for userISBN
+		int pos = searchISBN(b, userISBN);
+
+		// If book is found
 		if (pos >= 0) {
-			Book *currentSearch = mainBundle.getBundle();
-			if ((currentSearch + pos)->getQuantityOnHand() > 0) {
-				addBook(*(currentSearch + pos));
-			} else {
-				std::cout << "Book out of stock!\n";
+			// Print book details
+			printBook(b[pos]);
+
+			// Ask to add to cart
+			std::cout << "\nAdd this item to cart? (y/n): ";
+			std::string confirm = getConfirmation();
+			std::cout << std::endl;
+			
+			if (confirm == "y" || confirm == "Y") {
+				// Check if item is in stock
+				if (b[pos].getQuantity() > 0) {
+					// Add book to cart
+					getArray()[count++] = b[pos];
+					std::cout << "'" << b[pos].getTitle() << "' added to cart.\n\n";
+
+					// Check cart size
+					if (count >= getLength()) {
+						getArray().reSize(count + 1);
+					}
+				}
+				else {
+					std::cout << "Book is out of stock!\n\n";
+				}
 			}
 		}
 		else {
-			std::cout << "Could not find specified book!\n\n";
+			std::cout << "\nCould not find specified book!\n\n";
 		}
 
 		// Prompt for another search
-		std::cout << "Add another item? (y/n): ";
-		getline(std::cin, repeat);
+		std::cout << "\nAdd another item? (y/n): ";
+		repeat = getConfirmation();
+		std::cout << std::endl;
 	} while (repeat == "y" || repeat == "Y");
 }
 
-void ShoppingCart::sortISBN(Bundle b)				// Sort main bundle by isbn
+// Sort main bundle by isbn
+Bundle ShoppingCart::sortISBN(Bundle b)				
 {
-	Book *bundle = b.getBundle();
-	double total = 0;
-
-	for (int ind = 0; ind < b.getSize(); ind++)
+	for (int ind = 0; ind < b.getLength(); ind++)
 	{
-		int minISBN = (*bundle).getISBN();
+		int minISBN = b[ind].getISBN();
 		int swapInd = ind;
-		for (int target = ind; target < b.getSize(); target++)
+		for (int target = ind; target < b.getLength(); target++)
 		{
-			if ((*bundle).getISBN() < minISBN)
+			if (b[ind].getISBN() < minISBN)
 			{
 				swapInd = target;
-				minISBN = (*bundle).getISBN();
+				minISBN = b[ind].getISBN();
 			}
 		}
 		if (swapInd != ind)
 		{
-			Book temp = *(bundle + ind);
-			*(bundle + ind) = *(bundle + swapInd);
-			*(bundle + swapInd) = temp;
+			b.getArray().swap(b[ind], b[swapInd]);
 		}
 	}
+
+	return b;
 }
 
-int ShoppingCart::searchISBN(Bundle b, int search)		// Search main bundle for isbn, returns index position or -1
+// Search main bundle for isbn, returns index position or -1
+int ShoppingCart::searchISBN(Bundle b, int search)		
 {
-	Book *bundle = b.getBundle();
 	int first = 0;
-	int last = b.getSize();
+	int last = b.getLength();
 	int mid = 0;
-	
-	sortISBN(b);
+
+	Bundle sorted = sortISBN(b);
 
 	while (first <= last) {
 		mid = (first + last) / 2;
-		if ((bundle + mid)->getISBN() == search) {
-			return mid;			// If found, return index
+		if (sorted[mid].getISBN() == search) {
+			return mid;		// If found, return index
 		}
 		else {
-			if ((bundle + mid)->getISBN() > search) {
+			if (sorted[mid].getISBN() > search) {
 				last = mid - 1;
 			}
 			else {
@@ -191,25 +228,27 @@ int ShoppingCart::searchISBN(Bundle b, int search)		// Search main bundle for is
 			}
 		}
 	}
-	
+
 	// If not found, return -1
-	mid = -1;
-	return mid;
+	return -1;
 }
 
-void ShoppingCart::processTotals()		// Calculate all total values
+// Calculate all total values
+void ShoppingCart::processTotals()		
 {
-	Book *item = getBundle();
-	for (int i = 0; i < getSize(); i++) {
-		addSubtotal((item + i)->getRetailPrice());
-		addTotalProfit((item + i)->getRetailPrice() - (item + i)->getWholesaleCost());
+	Array<Book> bp = getArray();
+	
+	for (int i = 0; i < getLength(); i++) {
+		addSubtotal(bp[i].getPrice());
+		addTotalProfit(bp[i].getPrice() - bp[i].getCost());
 	}
 	calculateTotal();
 }
 
-void ShoppingCart::validateCart()		// Validate status of cart
+// Validate status of cart
+void ShoppingCart::validateCart()		
 {
-	if (getSize() > 0 && amountPaid >= totalCost) {
+	if (getLength() > 0 && amountPaid >= totalCost) {
 		completeCart = true;
 	}
 	else {
@@ -217,14 +256,21 @@ void ShoppingCart::validateCart()		// Validate status of cart
 	}
 }
 
+// Print book details
+void ShoppingCart::printBook(Book book) {
+	std::cout << std::setprecision(2) << std::fixed;
+	std::cout << book.getTitle() << std::endl;
+	std::cout << "by " << std::setw(40) << std::left << book.getAuthor() << "$" << book.getPrice() << std::endl;
+	std::cout << std::endl;
+}
+
+// Print all books in cart
 void ShoppingCart::printAll() {
-	Book *b = getBundle();
-	for (int i = 0; i < getSize(); i++)
+	Array<Book> bp = getArray();
+	
+	for (int i = 0; i < getLength(); i++)
 	{
-		std::cout << std::setprecision(2) << std::fixed;
-		std::cout << "Item #" << i + 1 << ":\n";
-		std::cout << (b + i)->getTitle() << std::endl;
-		std::cout << "by " << std::setw(40) << std::left << (b + i)->getAuthor() << "$" << (b + i)->getRetailPrice() << std::endl;
-		std::cout << std::endl;
+		std::cout << "Item #" << i + 1 << std::endl;
+		printBook(bp[i]);
 	}
 }

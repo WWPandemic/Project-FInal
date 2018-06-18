@@ -129,37 +129,28 @@ void BookReader::createBundle(Bundle &b)
 	}
 }
 
-//// **temp**
-//void BookReader::exportBundle(Bundle bundle)			// Sends bundle to output file
-//{
-//	// Open output file
-//	std::cout << "Exporting book inventory data, please enter the file path location ...\n";
-//	do {
-//		std::string userOutFile;
-//		std::cout << "Output File: ";
-//		getline(std::cin, userOutFile);			// User enters output file location
-//		outFile.open(userOutFile);
-//
-//		if (!outFile) {			// Validate output file
-//			std::cout << "Could not find the specified file, please try again.\n\n";
-//		}
-//		else {
-//			std::cout << "File successfully opened!\n\n";
-//		}
-//	} while (!outFile);
-//	
-//	// Write to output file
-//	Book *write = bundle.getBundle();
-//	for (int i = 0; i < bundle.getSize(); i++) {
-//		outFile << (write + i)->getTitle() << ";" <<
-//			(write + i)->getAuthor() << ";" <<
-//			(write + i)->getPublisher() << ";" <<
-//			stringISBN((write + i)->getISBN()) << ";" <<
-//			stringDate((write + i)->getDateAdded()) << ";" <<
-//			(write + i)->getQuantityOnHand() << ";" <<
-//			(write + i)->getWholesaleCost() << ";" <<
-//			(write + i)->getRetailPrice() << "\n";
-//	}
-//
-//	outFile.close();
-//}
+// Export bundle to specified output file
+void BookReader::exportBundle(Bundle &b)			// Sends bundle to output file
+{
+	// Open output file
+	std::cout << "Exporting book inventory data, please enter the file path location ...\n";
+
+	std::string userOutFile;
+	std::cout << "Output File: ";
+	getline(std::cin, userOutFile);			// User enters output file location
+	outFile.open(userOutFile);
+
+	// Write to output file
+	for (int i = 0; i < b.getLength(); i++) {
+		outFile << b[i].getTitle() << ";" <<
+			b[i].getAuthor() << ";" <<
+			b[i].getPublisher() << ";" <<
+			stringISBN(b[i].getISBN()) << ";" <<
+			stringDate(b[i].getDate()) << ";" <<
+			b[i].getQuantity() << ";" <<
+			b[i].getCost() << ";" <<
+			b[i].getPrice() << "\n";
+	}
+
+	outFile.close();
+}

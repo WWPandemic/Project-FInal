@@ -8,7 +8,7 @@
 //* Constructor definition *
 //**************************
 
-CashRegister::CashRegister(Bundle b)
+CashRegister::CashRegister(Bundle &b)
 {
 	menuBooks = b;
 	chosenOption = 4;
@@ -18,10 +18,6 @@ CashRegister::CashRegister(Bundle b)
 	totalProfit = 0.0;
 	transactions = 0;
 	booksSold = 0;
-
-	std::cout << "Starting up Cash Register module ...\n";
-	setDate();
-	setBalance();
 
 	introductions[0] = "---------------------------------------------------------------------------";
 	introductions[1] = "                      Welcome to the Cashier module:";
@@ -37,142 +33,176 @@ CashRegister::CashRegister(Bundle b)
 	introductions[11] = "";
 	introductions[12] = "---------------------------------------------------------------------------";
 	usedIntroLines = 13;
+
+	setUpRegister();
 }
 
 //***********************
 //* Mutator definitions *
 //***********************
 
-void CashRegister::setDate()						// Set current date
+// Set date and balance
+void CashRegister::setUpRegister()
 {
-	int m, d, y;
-	std::cout << "Please enter today's date (MM DD YYYY): ";			// Needs validation
+	clearScreen();
+	std::cout << "Starting up Cash Register module ...\n\n";
+	int m, d, y, bal;
+	std::cout << "Please enter today's date (MM DD YYYY): ";
 	std::cin >> m >> d >> y;
-	currentDate.setDate(m, d, y);
-}
-
-void CashRegister::setBalance()						// Set balance
-{
-	int bal;
-	std::cout << "Please enter amount of money in cash register: $";		// Needs validation
+	std::cout << "Please enter amount of money in cash register: $";
 	std::cin >> bal;
+	std::cin.ignore();
+	clearScreen();
+
+	currentDate = Date(m, d, y);
 	balance = bal;
 }
 
-void CashRegister::addBalance(double b)						// Add amount to balance
+// Add amount to balance
+void CashRegister::addBalance(double b)	
 {
 	balance += b;
 }
 
-void CashRegister::addSales(double s)				// Add amount to totalSales
+// Add amount to totalSales
+void CashRegister::addSales(double s)
 {
 	totalSales += s;
 }
 
-void CashRegister::addTax(double t)					// Add amount to totalTax
+// Add amount to totalTax
+void CashRegister::addTax(double t)					
 {
 	totalTax += t;
 }
 
-void CashRegister::addProfit(double p)				// Add amount to totalProfit
+// Add amount to totalProfit
+void CashRegister::addProfit(double p)				
 {
 	totalProfit += p;
 }
 
-void CashRegister::addTransaction()					// Add one to transactions
+// Add one to transactions
+void CashRegister::addTransaction()					
 {
 	transactions++;
 }
 
-void CashRegister::addBookSold(int b)					// Add amount to booksSold
+// Add amount to booksSold
+void CashRegister::addBookSold(int b)					
 {
 	booksSold += b;
 }
 
-void CashRegister::refundMoney(Book *b)				// Reduce book amounts from register
+// Reduce book amounts from register
+void CashRegister::refundMoney(Book b)			
 {
-	double retailPrice = b->getRetailPrice();
+	double retailPrice = b.getPrice();
 	balance -= retailPrice + (retailPrice * (TAX_RATE / 100));
 	totalSales -= retailPrice + (retailPrice * (TAX_RATE / 100));
 	totalTax -= retailPrice * (TAX_RATE / 100);
-	totalProfit -= retailPrice - b->getWholesaleCost();
+	totalProfit -= retailPrice - b.getCost();
 	booksSold--;
-	std::cout << std::setprecision(2) << std::fixed;
-	std::cout << "$" << retailPrice + (retailPrice * (TAX_RATE / 100)) << " refunded.\n";
 }
 
 //************************
 //* Function definitions *
 //************************
 
-std::string CashRegister::getDate()			// Return date as string
+// Return date as string
+std::string CashRegister::getDate()	
 {
 	return currentDate.toString();
 }
 
-void CashRegister::newTransaction(Bundle b)		// Create a new transaction
+// Create a new transaction
+void CashRegister::newTransaction(Bundle &b)		
 {
+	clearScreen();
+	std::cout << "---------------------------------------------------------------------------\n";
+	printCenter("New Transaction");
+	std::cout << "---------------------------------------------------------------------------\n\n";
+	
+	// Create cart
 	ShoppingCart cart(b);
 
+	// If cart is successfully completed
 	if (cart.getComplete())
 	{
+		// Add cart values to register
 		processCart(cart);
+
+		// Reduce inventory stock from bought items
 		reduceStock(b, cart);
+
+		// Print receipt
+		std::cout << "Press <Enter> to Print Receipt ...";
+		std::string pause = getConfirmation();
 		printReceipt(cart);
 	}
 }
 
-void CashRegister::processCart(ShoppingCart c)		// Add cart values to register
+// Add cart values to register
+void CashRegister::processCart(ShoppingCart c)		
 {
 	addBalance(c.getTotalCost());
 	addSales(c.getTotalCost());
 	addProfit(c.getTotalProfit());
 	addTax(c.getTax());
-	addBookSold(c.getSize());
+	addBookSold(c.getLength());
 	transactions++;
 }
 
-void CashRegister::reduceStock(Bundle b, ShoppingCart c)	// Adjust inventory based on purchases
-{
-	Book *bundle = b.getBundle();
-	Book *cart = c.getBundle();
-	
-	for (int i = 0; i < c.getSize(); i++)		// repeat for every book in cart
+// Adjust inventory based on purchases************
+void CashRegister::reduceStock(Bundle &b, ShoppingCart c)	
+{	
+	for (int i = 0; i < c.getLength(); i++)		// repeat for every book in cart
 	{
-		for (int j = 0; j < b.getSize(); j++) {		// linear search bundle
-			if (*(bundle + j) == *(cart + i)) {
-				(bundle + j)->setQuantityOnHand(((bundle + j)->getQuantityOnHand() - 1));
+		for (int j = 0; j < b.getLength(); j++) {		// linear search bundle
+			if (b[j] == c[i]) {
+				b[j].setQuantity(b[j].getQuantity() - 1);
 			}
 		}
 	}
 }
 
-void CashRegister::refundBook(Bundle b)					// Refund a book
+// Refund a book
+void CashRegister::refundBook(Bundle &b)					
 {
-	std::string repeat = "";
-	std::cout << "Please enter Book ISBN to refund.\n";
+	clearScreen();
+	std::cout << "---------------------------------------------------------------------------\n";
+	printCenter("Book Refund");
+	std::cout << "---------------------------------------------------------------------------\n\n";
+
+	std::string repeat;
+	std::cout << "Please enter Book ISBN to process refund.\n";
 	do {
 		int userISBN;
 		std::cout << "ISBN: ";
 		std::cin >> userISBN;
+		std::cin.ignore();
+		std::cout << std::endl;
 
 		// Search mainbundle for userISBN
 		int pos = searchISBN(b, userISBN);	
 		if (pos >= 0) {
-			Book *currentSearch = b.getBundle();
-			std::cout << "\n";
-			(currentSearch + pos)->print();		// print details of book
-			std::cout << "\n";
+			// Print book details
+			printBook(b[pos]);
 
-			// confirm refund
-			std::string confirm = "";
+			// Ask to confirm refund
 			std::cout << "Refund this book? (y/n): ";
-			getline(std::cin, confirm);
+			std::string confirm = getConfirmation();
+			std::cout << std::endl;
+
 			if (confirm == "y" || confirm == "Y") {
-				(currentSearch + pos)->setQuantityOnHand(((currentSearch + pos)->getQuantityOnHand() + 1));	// add 1 to stock
-				refundMoney((currentSearch + pos));
+				// Add 1 to book stock
+				b[pos].setQuantity((b[pos].getQuantity() + 1));
+				// Reduce values in register
+				refundMoney(b[pos]);
+				//Print confirmation
+				std::cout << std::setprecision(2) << std::fixed;
+				std::cout << "$" << b[pos].getPrice() + (b[pos].getPrice() * (TAX_RATE / 100)) << " was refunded.\n\n";
 			}
-			std::cout << "\n\n";
 		}
 		else {
 			std::cout << "Could not find specified book!\n\n";
@@ -180,52 +210,50 @@ void CashRegister::refundBook(Bundle b)					// Refund a book
 
 		// Prompt for another search
 		std::cout << "Refund another item? (y/n): ";
-		getline(std::cin, repeat);
+		repeat = getConfirmation();
 	} while (repeat == "y" || repeat == "Y");
 }
 
-void CashRegister::sortISBN(Bundle b)				// Sort main bundle by isbn
+// Sort main bundle by isbn
+Bundle CashRegister::sortISBN(Bundle b)				
 {
-	Book *bundle = b.getBundle();
-	double total = 0;
-
-	for (int ind = 0; ind < b.getSize(); ind++)
+	for (int ind = 0; ind < b.getLength(); ind++)
 	{
-		int minISBN = (*bundle).getISBN();
+		int minISBN = b[ind].getISBN();
 		int swapInd = ind;
-		for (int target = ind; target < b.getSize(); target++)
+		for (int target = ind; target < b.getLength(); target++)
 		{
-			if ((*bundle).getISBN() < minISBN)
+			if (b[ind].getISBN() < minISBN)
 			{
 				swapInd = target;
-				minISBN = (*bundle).getISBN();
+				minISBN = b[ind].getISBN();
 			}
 		}
 		if (swapInd != ind)
 		{
-			Book temp = *(bundle + ind);
-			*(bundle + ind) = *(bundle + swapInd);
-			*(bundle + swapInd) = temp;
+			b.getArray().swap(b[ind], b[swapInd]);
 		}
 	}
+
+	return b;
 }
 
-int CashRegister::searchISBN(Bundle b, int search)		// Search main bundle for isbn, returns index position or -1
+// Search main bundle for isbn, returns index position or -1
+int CashRegister::searchISBN(Bundle b, int search)		
 {
-	Book *bundle = b.getBundle();
 	int first = 0;
-	int last = b.getSize();
+	int last = b.getLength();
 	int mid = 0;
 
-	sortISBN(b);
+	Bundle sorted = sortISBN(b);
 
 	while (first <= last) {
 		mid = (first + last) / 2;
-		if ((bundle + mid)->getISBN() == search) {
+		if (sorted[mid].getISBN() == search) {
 			return mid;		// If found, return index
 		}
 		else {
-			if ((bundle + mid)->getISBN() > search) {
+			if (sorted[mid].getISBN() > search) {
 				last = mid - 1;
 			}
 			else {
@@ -235,49 +263,78 @@ int CashRegister::searchISBN(Bundle b, int search)		// Search main bundle for is
 	}
 
 	// If not found, return -1
-	mid = -1;
-	return mid;
+	return -1;
 }
 
-void CashRegister::printReceipt(ShoppingCart c)			// Print details of current transaction
-{
-	printLines(50);
-	std::cout << std::setw(44) << "Serendipity Booksellers Order Summary" << std::endl;
-	std::cout << std::setw(30) << currentDate.toString() << std::endl;
-	printLines(50);
-	c.printAll();
-	printLines(50);
+// Print book details
+void CashRegister::printBook(Book book) {
 	std::cout << std::setprecision(2) << std::fixed;
-	std::cout << std::setw(40) << std::left << "Subtotal:" << c.getSubtotal() << std::endl;
-	std::cout << std::setw(40) << std::left << "Tax:" << c.getTax() << std::endl;
-	std::cout << std::setw(40) << std::left << "Total:" << c.getTotalCost() << std::endl << std::endl;
-	std::cout << std::setw(40) << std::left << "Amount Paid:" << c.getAmountPaid() << std::endl;
-	std::cout << std::setw(40) << std::left << "Change:" << c.getChange() << std::endl;
-	printLines(50);
-}
-
-void CashRegister::printSalesReport()					// Print sales report of cash register
-{
-	printLines(50);
-	std::cout << std::setw(43) << "Serendipity Booksellers Sales Report" << std::endl;
-	std::cout << std::setw(30) << currentDate.toString() << std::endl;
-	printLines(50);
-	std::cout << std::setprecision(2) << std::fixed << std::endl;
-	std::cout << std::setw(40) << std::left << "Register Balance:" << balance << std::endl;
-	std::cout << std::setw(40) << std::left << "Total Sales:" << totalSales << std::endl;
-	std::cout << std::setw(40) << std::left << "Total Tax:" << totalTax << std::endl;
-	std::cout << std::setw(40) << std::left << "Total Profit:" << totalProfit << std::endl;
-	std::cout << std::setw(40) << std::left << "Number of Transactions:" << transactions << std::endl;
-	std::cout << std::setw(40) << std::left << "Number of Books Sold:" << booksSold << std::endl << std::endl;
-	printLines(50);
-}
-
-void CashRegister::printLines(int l)					// Print lines for formatting
-{
-	for (int i = 0; i < l; i++) {
-		std::cout << "-";
-	}
+	std::cout << book.getTitle() << std::endl;
+	std::cout << "by " << std::setw(50) << std::left << book.getAuthor() << "$" << book.getPrice() << std::endl;
 	std::cout << std::endl;
+}
+
+
+// Print details of current transaction
+void CashRegister::printReceipt(ShoppingCart c)			
+{
+	clearScreen();
+	std::cout << "---------------------------------------------------------------------------\n";
+	printCenter("Serendipity Booksellers Order Summary");
+	printCenter(currentDate.toString());
+	std::cout << "---------------------------------------------------------------------------\n";
+	c.printAll();
+	std::cout << "---------------------------------------------------------------------------\n";
+	std::cout << std::setprecision(2) << std::fixed;
+	std::cout << std::setw(50) << std::left << "Subtotal:" << c.getSubtotal() << std::endl;
+	std::cout << std::setw(50) << std::left << "Tax:" << c.getTax() << std::endl;
+	std::cout << std::setw(50) << std::left << "Total:" << c.getTotalCost() << std::endl << std::endl;
+	std::cout << std::setw(50) << std::left << "Amount Paid:" << c.getAmountPaid() << std::endl;
+	std::cout << std::setw(50) << std::left << "Change:" << c.getChange() << std::endl;
+	std::cout << "---------------------------------------------------------------------------\n";
+}
+
+// Print sales report of cash register
+void CashRegister::printSalesReport()					
+{
+	clearScreen();
+	std::cout << "---------------------------------------------------------------------------\n";
+	printCenter("Serendipity Booksellers Sales Report");
+	printCenter(currentDate.toString());
+	std::cout << "---------------------------------------------------------------------------\n";
+	std::cout << std::setprecision(2) << std::fixed << std::endl;
+	std::cout << std::setw(50) << std::left << "Register Balance:" << balance << std::endl;
+	std::cout << std::setw(50) << std::left << "Total Sales:" << totalSales << std::endl;
+	std::cout << std::setw(50) << std::left << "Total Tax:" << totalTax << std::endl;
+	std::cout << std::setw(50) << std::left << "Total Profit:" << totalProfit << std::endl;
+	std::cout << std::setw(50) << std::left << "Number of Transactions:" << transactions << std::endl;
+	std::cout << std::setw(50) << std::left << "Number of Books Sold:" << booksSold << std::endl << std::endl;
+	std::cout << "---------------------------------------------------------------------------\n";
+
+	std::cout << "\n\n\n";
+	std::cout << "Press <Enter> to Continue ...";
+	std::string pause = getConfirmation();
+	clearScreen();
+}
+
+// Print center text in between line breaks
+void CashRegister::printCenter(std::string text) {
+	int lineLength = 76;
+	int spacing = (lineLength / 2) + (text.length() / 2);
+	std::cout << std::setw(spacing) << text << std::endl;
+}
+
+// Clear text from console
+void CashRegister::clearScreen()
+{
+	system("CLS");
+}
+
+// Get confirmation
+std::string CashRegister::getConfirmation() {
+	std::string input;
+	getline(std::cin, input);
+	return input;
 }
 
 //********************
@@ -314,11 +371,3 @@ void CashRegister::runOptions()
 		break;
 	}
 }
-
-/*
-To do:
-- isbn search/sort
-- input validation
-
-- possible feature: save receipts to output file
-*/
