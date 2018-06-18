@@ -126,7 +126,6 @@
     <ClCompile Include="Bundle.cpp" />
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="CIS22B_Final.cpp" />
-    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

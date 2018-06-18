@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include "Book.h"
 
@@ -25,7 +26,7 @@ Book::Book(std::string title, std::string author, std::string publisher, int ISB
 
 std::ostream& operator<<(std::ostream& os, const Book& b) {
 	int count = b.getQuantity();
-	os << b.toString();	                  //RetialPrice
+	os << b.toString();
 	return os;
 }
 
@@ -33,38 +34,67 @@ std::istream& operator>>(std::istream& is, const Book& b) {
 	return is;
 }
 
-bool operator==(const Book &book1, const Book &book2) {
-	if (book1.getTitle() == book2.getTitle())
-		if (book1.getAuthor() == book2.getAuthor())
-			if(book1.getPublisher() == book2.getPublisher())
-				if(book1.getDate() == book2.getDate())
-					if(book1.getQuantity() == book1.getQuantity())
-						if(book1.getCost() == book2.getCost())
-							if(book1.getPrice() == book2.getPrice())
+bool operator==(const Book &b1, const Book &b2) {
+	if (b1.getTitle() == b2.getTitle())
+		if (b1.getAuthor() == b2.getAuthor())
+			if(b1.getPublisher() == b2.getPublisher())
+				if(b1.getDate() == b2.getDate())
+					if(b1.getQuantity() == b1.getQuantity())
+						if(b1.getCost() == b2.getCost())
+							if(b1.getPrice() == b2.getPrice())
 								return true;
 	return false;
 }
 
-bool operator!=(const Book &book1, const Book &book2) {
-	if (book1 == book2)
+bool operator!=(const Book &b1, const Book &b2) {
+	if (b1 == b2)
 		return false;
 	return true;
 }
 
-bool operator<(const Book &book1, const Book &book2) {
+bool operator<(const Book &b1, const Book &b2) {
+	if (b1.getTitle() < b2.getTitle())
+		return true;
+	else if (b1.getTitle() == b2.getTitle())
+		if (b1.getAuthor() < b2.getAuthor())
+			return true;
+		else if (b1.getAuthor() == b2.getAuthor())
+			if (b1.getPublisher() < b2.getPublisher())
+				return true;
+			else if (b1.getPublisher() == b2.getPublisher())
+				if (b1.getISBN() < b2.getISBN())
+					return true;
+				else if (b1.getISBN() == b2.getISBN())
+					if (b1.getDate() < b2.getDate())
+						return true;
+					else if (b1.getDate() == b2.getDate())
+						if (b1.getQuantity() < b2.getQuantity())
+							return true;
+						else if (b1.getQuantity() == b2.getQuantity())
+							if (b1.getCost() < b2.getCost())
+								return true;
+							else if (b1.getCost() == b2.getCost())
+								if (b1.getPrice() < b2.getPrice())
+									return true;
 	return false;
 }
 
-bool operator<=(const Book &book1, const Book &book2) {
+bool operator<=(const Book &b1, const Book &b2) {
+	if (b1 == b2 || b1 < b2)
+		return true;
 	return false;
 }
 
-bool operator>(const Book &book1, const Book &book2) {
-	return false;
+bool operator>(const Book &b1, const Book &b2) {
+	if(b1 < b2 || b1 == b2)
+		return false;
+	return true;
 }
 
-bool operator>=(const Book &book1, const Book &book2) {
-	return false;
+bool operator>=(const Book &b1, const Book &b2) {
+	if(b1 < b2)
+		return false;
+	return true;
 }
 /*
 - - - Getters

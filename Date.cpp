@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Date.h"
 
 Date::Date() : m_month(1), m_day(1), m_year(1) {}
@@ -9,20 +10,25 @@ std::ostream& operator<<(std::ostream& os, const Date& dt) { os << dt.toString()
 bool operator<(const Date& dt1, const Date& dt2) {
 	if (dt1.m_year < dt2.m_year)
 		return true;
-	else if (dt1.m_year == dt2.m_year && dt1.m_month < dt2.m_month)
-		return true;
-	else if (dt1.m_month == dt2.m_month && dt1.m_day < dt2.m_day)
-		return true;
+	else if (dt1.m_year == dt2.m_year)
+		if (dt1.m_month < dt2.m_month)
+			return true;
+		else if (dt1.m_month == dt2.m_month)
+			if (dt1.m_day < dt2.m_day)
+				return true;
 	return false;
+
 }
 
 bool operator>(const Date& dt1, const Date& dt2) {
 	if (dt1.m_year > dt2.m_year)
 		return true;
-	else if (dt1.m_year == dt2.m_year && dt1.m_month > dt2.m_month)
-		return true;
-	else if (dt1.m_month == dt2.m_month && dt1.m_day > dt2.m_day)
-		return true;
+	else if (dt1.m_year == dt2.m_year)
+		if (dt1.m_month > dt2.m_month)
+			return true;
+		else if (dt1.m_month == dt2.m_month)
+			if (dt1.m_day > dt2.m_day)
+				return true;
 	return false;
 }
 
