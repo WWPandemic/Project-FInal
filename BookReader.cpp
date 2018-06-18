@@ -103,10 +103,11 @@ std::string BookReader::stringDate(Date date)
 }
 
 // Creates bundle from input file
-void BookReader::createBundle(Bundle &b)
+Bundle BookReader::createBundle()
 {
+	Bundle b;						// Create bundle
 	std::string bookInfo;			// All book info in a single string
-	int count = 0;							// Number of books
+	int count = 0;					// Number of books
 
 	// Read each line, separate into variables and create a new book
 	while (getline(inFile, bookInfo))
@@ -119,18 +120,18 @@ void BookReader::createBundle(Bundle &b)
 		// Convert date info into Date object
 		Date date(stoi(info[4].substr(0, 2)), stoi(info[4].substr(2, 2)), stoi(info[4].substr(4, 4)));
 
-		// Add book to bundle, add one to count
-		b[count++] = Book(info[0], info[1], info[2], stoi(info[3]), date, stoi(info[5]), stod(info[6]), stod(info[7]));
+		// Add book to bundle
+		b.addBook(Book(info[0], info[1], info[2], stoi(info[3]), date, stoi(info[5]), stod(info[6]), stod(info[7])));
 
 		// Check bundle size
-		if (count >= b.getLength()) {
-			//bundle.getArray().reSize(count + 1);
-		}
+		b.ensureSize(++count);
 	}
+
+	return b;
 }
 
 // Export bundle to specified output file
-void BookReader::exportBundle(Bundle &b)			// Sends bundle to output file
+void BookReader::exportBundle(Bundle b)			// Sends bundle to output file
 {
 	// Open output file
 	std::cout << "Exporting book inventory data, please enter the file path location ...\n";
@@ -141,7 +142,7 @@ void BookReader::exportBundle(Bundle &b)			// Sends bundle to output file
 	outFile.open(userOutFile);
 
 	// Write to output file
-	for (int i = 0; i < b.getLength(); i++) {
+	for (int i = 0; i < b.getSize(); i++) {
 		outFile << b[i].getTitle() << ";" <<
 			b[i].getAuthor() << ";" <<
 			b[i].getPublisher() << ";" <<
@@ -152,5 +153,6 @@ void BookReader::exportBundle(Bundle &b)			// Sends bundle to output file
 			b[i].getPrice() << "\n";
 	}
 
+	std::cout << "Book data inventory exported to '" << userOutFile << "'" << std::endl;
 	outFile.close();
 }
