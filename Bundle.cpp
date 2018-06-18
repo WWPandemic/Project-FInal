@@ -10,9 +10,9 @@ Bundle::Bundle(const Bundle &src) : m_books(src.getSize()) {
 }
 
 Bundle& Bundle::operator=(const Bundle& src) {
-	int size = src.getSize();
-	m_books = Array<Book>(size);
-	for (int i = 0; i < size; i++)
+	m_size = src.getSize();
+	m_books = Array<Book>(m_size);
+	for (int i = 0; i < m_size; i++)
 		m_books[i] = src[i];
 	return *this;
 }
@@ -54,13 +54,29 @@ void Bundle::removeBook(int index) {
 	m_size--;
 }
 
+void Bundle::removeBook(std::string title) {
+	removeBook(findFirstIndex("e"));
+}
+
 void Bundle::removeAll() {
 	m_size = 0;
+}
+
+void Bundle::removeAll(std::string title) {
+	int index[2] = { 0, 0 };
+	findIndexBounds(title,index);
+	int dif = index[1] - index[0] + 1;
+	for (int i = 0; i < dif; i++)
+		removeBook(index[0]);
 }
 
 void Bundle::removeAllAfter(int index) {
 	if (ensureIndex(index))
 		m_size = index;
+}
+
+void Bundle::removeAllAfter(std::string title) {
+	removeAllAfter(findFirstIndex(title));
 }
 
 std::string Bundle::getBookTitle(int index) const { if (ensureIndex(index)) return m_books[index].getTitle(); }

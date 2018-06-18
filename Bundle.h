@@ -4,7 +4,7 @@
 #include "Book.h"
 
 class Bundle {
-private:
+protected:
 	Array<Book> m_books;
 	int m_size;
 
@@ -25,8 +25,9 @@ public:
 	void removeBook(int index);
 	void removeBook(std::string title);
 	void removeAll();
-	void removeAllBooks(std::string title);
+	void removeAll(std::string title);
 	void removeAllAfter(int index);
+	void removeAllAfter(std::string title);
 
 	std::string getBookTitle(int index) const;
 	std::string getBookAuthor(int index) const;
