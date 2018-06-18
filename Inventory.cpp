@@ -57,6 +57,7 @@ void Inventory::AddNewBooks()
 	{
 		std::cout << "Enter the title for book #" << i + 1 << ": ";
 		std::string title;
+		std::cin.ignore();
 		getline(std::cin, title);
 
 		std::cout << "Enter the author's name for book #" << i + 1 << ": ";
@@ -93,7 +94,8 @@ void Inventory::AddNewBooks()
 		Date todayDate(month, day, year);
 
 		books->addBook(title, author, publisher, ISBN, todayDate, quantity, cost, price);
-
+		
+		std::cin.ignore();
 		std::cout << "Book added.\n\n";
 	}
 
@@ -110,6 +112,7 @@ void Inventory::DeleteBooks()
 	{
 		std::cout << "Enter the title or ISBN of the book: ";
 		std::string info;
+		std::cin.ignore();
 		getline(std::cin, info);
 
 		int index;
@@ -240,9 +243,9 @@ int Inventory::searchByTitle(std::string title)
 				min = j;
 		if (min != i)
 		{
-			std::string temp = (b + min)->getTitle();
-			(b + min)->setTitle((b + i)->getTitle());
-			(b + i)->setTitle(temp);
+			Book temp(*(b + i));
+			*(b + i) = *(b + min);
+			*(b + min) = temp;
 		}
 	}
 	
@@ -275,9 +278,9 @@ int Inventory::searchByISBN(int ISBN)
 				min = j;
 		if (min != i)
 		{
-			int temp = (b + min)->getISBN();
-			(b + min)->setISBN((b + i)->getISBN());
-			(b + i)->setISBN(temp);
+			Book temp(*(b + i));
+			*(b + i) = *(b + min);
+			*(b + min) = temp;
 		}
 	}
 
