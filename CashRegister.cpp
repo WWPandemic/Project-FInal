@@ -8,7 +8,7 @@
 //* Constructor definition *
 //**************************
 
-CashRegister::CashRegister(Bundle &b)
+CashRegister::CashRegister(Bundle b)
 {
 	menuBooks = b;
 	chosenOption = 4;
@@ -149,20 +149,30 @@ void CashRegister::processCart(ShoppingCart c)
 	addSales(c.getTotalCost());
 	addProfit(c.getTotalProfit());
 	addTax(c.getTax());
-	addBookSold(c.getLength());
+	addBookSold(c.getSize());
 	transactions++;
 }
 
-// Adjust inventory based on purchases************
+// Adjust inventory based on purchases
 void CashRegister::reduceStock(Bundle &b, ShoppingCart c)	
 {	
-	for (int i = 0; i < c.getLength(); i++)		// repeat for every book in cart
+	for (int cartBook = 0; cartBook < c.getSize(); cartBook++)		// repeat for every book in cart
 	{
-		for (int j = 0; j < b.getLength(); j++) {		// linear search bundle
-			if (b[j] == c[i]) {
-				b[j].setQuantity(b[j].getQuantity() - 1);
-			}
+		int pos = b.findPos(c[cartBook]);
+
+		if (pos >= 0) {
+			b[pos].setQuantity(b[pos].getQuantity() - 1);
 		}
+	}
+}
+
+// Add book back to inventory from refund
+void CashRegister::increaseStock(Bundle &b, Book book) 
+{
+	int pos = b.findPos(book);
+
+	if (pos >= 0) {
+		b[pos].setQuantity(b[pos].getQuantity() - 1);
 	}
 }
 
@@ -174,9 +184,14 @@ void CashRegister::refundBook(Bundle &b)
 	printCenter("Book Refund");
 	std::cout << "---------------------------------------------------------------------------\n\n";
 
-	std::string repeat;
+	std::string repeat;		// To loop refunding of books
+
+	// Sort bundle by ISBN for searchability
+	sortISBN(b);
+
 	std::cout << "Please enter Book ISBN to process refund.\n";
 	do {
+		// Prompt user for ISBN
 		int userISBN;
 		std::cout << "ISBN: ";
 		std::cin >> userISBN;
@@ -185,75 +200,79 @@ void CashRegister::refundBook(Bundle &b)
 
 		// Search mainbundle for userISBN
 		int pos = searchISBN(b, userISBN);	
+
+		// If book was found
 		if (pos >= 0) {
 			// Print book details
 			printBook(b[pos]);
 
-			// Ask to confirm refund
+			// Prompt user for confirmation to refund
 			std::cout << "Refund this book? (y/n): ";
 			std::string confirm = getConfirmation();
 			std::cout << std::endl;
 
+			// If refund is confirmed
 			if (confirm == "y" || confirm == "Y") {
 				// Add 1 to book stock
-				b[pos].setQuantity((b[pos].getQuantity() + 1));
+				increaseStock(b, b[pos]);
 				// Reduce values in register
 				refundMoney(b[pos]);
 				//Print confirmation
 				std::cout << std::setprecision(2) << std::fixed;
 				std::cout << "$" << b[pos].getPrice() + (b[pos].getPrice() * (TAX_RATE / 100)) << " was refunded.\n\n";
 			}
+			// If refund is not confirmed
+			else {
+				std::cout << "Refund cancelled.\n\n";
+			}
 		}
+		// If book was not found
 		else {
 			std::cout << "Could not find specified book!\n\n";
 		}
 
-		// Prompt for another search
+		// Prompt user for another refund
 		std::cout << "Refund another item? (y/n): ";
 		repeat = getConfirmation();
 	} while (repeat == "y" || repeat == "Y");
 }
 
 // Sort main bundle by isbn
-Bundle CashRegister::sortISBN(Bundle b)				
+void CashRegister::sortISBN(Bundle &b)				
 {
-	for (int ind = 0; ind < b.getLength(); ind++)
+	for (int ind = 0; ind < 25; ind++) //***
 	{
 		int minISBN = b[ind].getISBN();
 		int swapInd = ind;
-		for (int target = ind; target < b.getLength(); target++)
+		for (int target = ind; target < 25; target++)	//***
 		{
-			if (b[ind].getISBN() < minISBN)
+			if (b[target].getISBN() < minISBN)
 			{
 				swapInd = target;
-				minISBN = b[ind].getISBN();
+				minISBN = b[target].getISBN();
 			}
 		}
 		if (swapInd != ind)
 		{
-			b.getArray().swap(b[ind], b[swapInd]);
+			b.getArray().swap(b[ind], b[swapInd]); //***swap
 		}
 	}
-
-	return b;
 }
 
 // Search main bundle for isbn, returns index position or -1
-int CashRegister::searchISBN(Bundle b, int search)		
+int CashRegister::searchISBN(Bundle &b, int search)		
 {
 	int first = 0;
-	int last = b.getLength();
+	int last = 25;	//b.getSize();***
 	int mid = 0;
-
-	Bundle sorted = sortISBN(b);
 
 	while (first <= last) {
 		mid = (first + last) / 2;
-		if (sorted[mid].getISBN() == search) {
+		if (b[mid].getISBN() == search) {
 			return mid;		// If found, return index
 		}
 		else {
-			if (sorted[mid].getISBN() > search) {
+			if (b[mid].getISBN() > search) {
 				last = mid - 1;
 			}
 			else {

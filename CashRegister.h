@@ -38,12 +38,13 @@ public:
 
 	// Functions
 	std::string getDate();							// Return date as string
-	void newTransaction(Bundle b);					// Create a new transaction (pass main book bundle)
+	void newTransaction(Bundle &b);					// Create a new transaction (pass main book bundle)
 	void processCart(ShoppingCart c);				// Adds cart values to register
 	void reduceStock(Bundle &b, ShoppingCart c);	// Adjust inventory based on purchased items
-	void refundBook(Bundle b);						// Refund a book (pass main book bundle)
-	Bundle sortISBN(Bundle b);						// Sort bundle by isbn
-	int searchISBN(Bundle b, int search);			// Search main bundle for isbn
+	void increaseStock(Bundle &b, Book book);		// Add book back to inventory from refund
+	void refundBook(Bundle &b);						// Refund a book (pass main book bundle)
+	void sortISBN(Bundle &b);						// Sort bundle by isbn
+	int searchISBN(Bundle &b, int search);			// Search main bundle for isbn
 	void printBook(Book);							// Print book details
 	void printReceipt(ShoppingCart c);				// Print details of current transaction
 	void printSalesReport();						// Print sales report of cash register

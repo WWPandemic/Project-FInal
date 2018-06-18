@@ -15,7 +15,7 @@ private:
 public:
 	// Constructors
 	ShoppingCart();
-	ShoppingCart(Bundle b);
+	ShoppingCart(Bundle &b);
 
 	// Accessors
 	double getSubtotal() const;				// Return subtotal
@@ -34,12 +34,12 @@ public:
 	void processPay();					// Input value for amountPaid
 
 	// Functions
-	std::string getConfirmation();		// Get confirmation
-	void addItems(Bundle);				// Add items to cart
-	Bundle sortISBN(Bundle);			// Sort bundle by isbn
-	int searchISBN(Bundle, int);		// Search main bundle for isbn
-	void processTotals();				// Calculate all total values
-	void validateCart();				// Validate status of cart
-	void printBook(Book);				// Print book details
-	void printAll();					// Print all books in cart
+	std::string getConfirmation();			// Get confirmation
+	void addItems(Bundle &b);				// Add items to cart
+	void sortISBN(Bundle &b);				// Sort bundle by isbn
+	int searchISBN(Bundle &b, int);			// Search main bundle for isbn
+	void processTotals();					// Calculate all total values
+	void validateCart();					// Validate status of cart
+	void printBook(Book);					// Print book details
+	void printAll();						// Print all books in cart
 };
