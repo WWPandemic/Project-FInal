@@ -1,15 +1,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "Bundle.h"
 
-Bundle::Bundle() : m_books(25) { m_size = 0; }
-Bundle::Bundle(int size) : m_books(size) { m_size = 0; }
-Bundle::Bundle(const Bundle &src) : m_books(src.getSize()) {
+Bundle::Bundle() : m_books(25) { m_size = 0; }  //creates an empty bundle of a default size of 25
+Bundle::Bundle(int size) : m_books(size) { m_size = 0; } //creates an empty bundle of the specified size
+Bundle::Bundle(const Bundle &src) : m_books(src.getSize()) { //creates a bundle containing all the books contained within the given bundle
 	m_size = src.getSize();
 	for (int i = 0; i < m_size; i++)
 		m_books[i] = src[i];
 }
 
-Bundle& Bundle::operator=(const Bundle& src) {
+Bundle& Bundle::operator=(const Bundle& src) {  //basic copy constructer, just copying array contents as well
 	m_size = src.getSize();
 	m_books = Array<Book>(m_size);
 	for (int i = 0; i < m_size; i++)
@@ -28,7 +28,7 @@ std::ostream& operator<<(std::ostream& os, const Bundle& src) {
 	return os;
 }
 
-void Bundle::addBook(const Book &b) {
+void Bundle::addBook(const Book &b) { //Adds the given book to the array, such that everything is in alphabetical order by title
 	m_books.ensureLength(m_size + 1);
 	int pos = findPos(b);
 	for (int i = m_size - 1; i >= pos; i--)
