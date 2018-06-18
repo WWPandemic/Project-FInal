@@ -7,8 +7,6 @@ class Bundle {
 protected:
 	Array<Book> m_books;
 	int m_size;
-
-	int findPos(const Book &b);
 public:
 	Bundle();
 	Bundle(int size);
@@ -38,9 +36,10 @@ public:
 	double getBookCost(int index) const;
 	double getBookPrice(int index) const;
 
-
+	int findPos(const Book &b);
 	int getSize() const;
 	
+	int findIndex(Book &);
 	int findFirstIndex(std::string title); //Returns the first book in the sorted array with the given name
 	void findIndexBounds(std::string title, int index[2]);  //Returns a pair of indexs containing the lower and higher bound
 

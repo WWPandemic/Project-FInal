@@ -113,6 +113,21 @@ int Bundle::findPos(const Book &b) {
 	return m_size;
 }
 
+int Bundle::findIndex(Book &b) {
+	int min = 0, middle = 0, max = m_size - 1;
+	while (min <= max) {
+		middle = (min + max) / 2;
+		if (b == m_books[middle]) {
+			return middle;
+		}
+		else if (b < m_books[middle])
+			max = middle - 1;
+		else
+			min = middle + 1;
+	}
+	return middle;
+}
+
 //returns an index location of a book with the given title
 int Bundle::findFirstIndex(std::string title) {
 	int min = 0, middle = 0, max = m_size - 1;
