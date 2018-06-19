@@ -8,12 +8,12 @@ Date::Date(int month, int day, int year) : m_month(month), m_day(day), m_year(ye
 std::ostream& operator<<(std::ostream& os, const Date& dt) { os << dt.toString(); return os; }
 
 bool operator<(const Date& dt1, const Date& dt2) {
-	if (dt1.m_year < dt2.m_year)
+	if (dt1.m_year < dt2.m_year) //checks to see if the year of the first date is smaller than the second
 		return true;
-	else if (dt1.m_year == dt2.m_year)
-		if (dt1.m_month < dt2.m_month)
+	else if (dt1.m_year == dt2.m_year) //if not checks to see if they are equal
+		if (dt1.m_month < dt2.m_month) //if it is, check to see if the first date's month is smaller than the second
 			return true;
-		else if (dt1.m_month == dt2.m_month)
+		else if (dt1.m_month == dt2.m_month) //repeat until all variables are checked
 			if (dt1.m_day < dt2.m_day)
 				return true;
 	return false;
