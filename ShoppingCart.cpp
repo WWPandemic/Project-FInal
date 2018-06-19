@@ -111,16 +111,40 @@ void ShoppingCart::processPay()
 	}
 	// If there are items in cart
 	else {
+		std::string repeat;
 		double paid;
 		std::cout << std::setprecision(2) << std::fixed;
 		std::cout << "The total is: $" << getTotalCost() << std::endl;
 		
-		// Prompt user to enter amount paid
-		std::cout << "Enter the amount paid: $";
-		std::cin >> paid;
-		std::cin.ignore();
-		std::cout << std::endl;
+		do {
+			// Prompt user to enter amount paid
+			std::cout << "\nEnter the amount paid: $";
+			std::string input;
+			getline(std::cin, input);
+			// Check for invalid inputs
+			try {
+				paid = std::stod(input);
+			}
+			catch (...)
+			{
+				paid = -1;
+			}
+			if (paid < 0) {
+				std::cout << "Invalid amount.\n";
+				repeat = "y";
+			}
+			// If amount paid is less than total cost
+			if (paid > -1 && paid < getTotalCost()) {
+				std::cout << "Amount paid is lesser than amount owed, enter amount paid again? (y/n): ";
+				getline(std::cin, repeat);
+			}
+			// If amount paid is valid, exit loop
+			if (paid >= getTotalCost()) {
+				repeat = "n";
+			}
+		} while (repeat == "y" || repeat == "Y");
 
+		std::cout << std::endl;
 		amountPaid = paid;
 	}
 }
@@ -149,8 +173,16 @@ void ShoppingCart::addItems(Bundle &b) {
 		// Prompt user for ISBN
 		int userISBN;
 		std::cout << "ISBN: ";
-		std::cin >> userISBN;
-		std::cin.ignore();
+		std::string input;
+		getline(std::cin, input);
+		// Check for invalid inputs
+		try {
+			userISBN = std::stoi(input);
+		}
+		catch (...)
+		{
+			userISBN = 0;
+		}
 		std::cout << std::endl;
 
 		// Search main bundle for userISBN
@@ -161,6 +193,7 @@ void ShoppingCart::addItems(Bundle &b) {
 			// Print book details
 			std::cout << "\n---------------------------------------------------------------------------\n\n";
 			printBook(b[pos]);
+			std::cout << "Stock: " << b[pos].getQuantity() << std::endl;
 			std::cout << "---------------------------------------------------------------------------\n";
 
 			// Prompt user for confirmation to add to cart
@@ -273,7 +306,7 @@ void ShoppingCart::validateCart()
 void ShoppingCart::printBook(Book book) {
 	std::cout << std::setprecision(2) << std::fixed;
 	std::cout << book.getTitle() << std::endl;
-	std::cout << "by " << std::setw(50) << std::left << book.getAuthor() << "$" << book.getPrice() << std::endl;
+	std::cout << "by " << std::setw(57) << std::left << book.getAuthor() << "$" << book.getPrice() << std::endl;
 	std::cout << std::endl;
 }
 

@@ -42,6 +42,7 @@ public:
 	void processCart(ShoppingCart c);				// Adds cart values to register
 	void reduceStock(Bundle &b, ShoppingCart c);	// Adjust inventory based on purchased items
 	void increaseStock(Bundle &b, Book book);		// Add book back to inventory from refund
+	int findIndex(const Bundle &b, Book book);
 	void refundBook(Bundle &b);						// Refund a book (pass main book bundle)
 	void sortISBN(Bundle &b);						// Sort bundle by isbn
 	int searchISBN(Bundle &b, int search);			// Search main bundle for isbn

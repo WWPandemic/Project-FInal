@@ -34,9 +34,6 @@ CashRegister::CashRegister(Bundle &b)
 	introductions[12] = "---------------------------------------------------------------------------";
 	usedIntroLines = 13;
 
-
-
-
 	setUpRegister();
 }
 
@@ -49,12 +46,40 @@ void CashRegister::setUpRegister()
 {
 	clearScreen();
 	std::cout << "Starting up Cash Register module ...\n\n";
-	int m, d, y, bal;
-	std::cout << "Please enter today's date (MM DD YYYY): ";
-	std::cin >> m >> d >> y;
-	std::cout << "Please enter amount of money in cash register: $";
-	std::cin >> bal;
-	std::cin.ignore();
+	int m, d, y;
+	double bal;
+	std::string input;
+
+	do {
+		std::cout << "Please enter today's date (MMDDYYYY): ";
+		getline(std::cin, input);
+		try {
+			m = stoi(input.substr(0, 2));
+			d = stoi(input.substr(2, 2));
+			y = stoi(input.substr(4, 4));
+		}
+		catch (...) {
+			y = 0;
+		}
+		if (y == 0 || y < 2000) {
+			std::cout << "Invalid date.\n\n";
+		}
+	} while (y == 0 || y < 2000);
+
+	do {
+		std::cout << "Please enter amount of money in cash register: $";
+		getline(std::cin, input);
+		try {
+			bal = stod(input);
+		}
+		catch (...) {
+			bal = -1;
+		}
+		if (bal == -1) {
+			std::cout << "Invalid amount.\n\n";
+		}
+	} while (bal == -1);
+
 	clearScreen();
 
 	currentDate = Date(m, d, y);
@@ -162,12 +187,11 @@ void CashRegister::reduceStock(Bundle &b, ShoppingCart c)
 {	
 	for (int cartBook = 0; cartBook < c.getSize(); cartBook++)		// repeat for every book in cart
 	{
-		int pos = b.findIndex(c[cartBook]);
+		int pos = findIndex(b, c[cartBook]);
 
 		if (pos >= 0) {
 			b[pos].setQuantity(b[pos].getQuantity() - 1);
 		}
-		std::cout << b[pos] << std::endl;
 	}
 
 }
@@ -175,13 +199,34 @@ void CashRegister::reduceStock(Bundle &b, ShoppingCart c)
 // Add book back to inventory from refund
 void CashRegister::increaseStock(Bundle &b, Book book) 
 {
-	int pos = b.findIndex(book);
+	int pos = findIndex(b, book);
 
 	if (pos >= 0) {
 		b[pos].setQuantity(b[pos].getQuantity() + 1);
 	}
+}
 
-	std::cout << b[pos] << std::endl;
+int CashRegister::findIndex(const Bundle &b, Book search) {
+	int first = 0;
+	int last = b.getSize();
+	int mid = 0;
+
+	while (first <= last) {
+		mid = (first + last) / 2;
+		if (b[mid].getISBN() == search.getISBN()) {
+			return mid;		// If found, return index
+		}
+		else {
+			if (b[mid].getISBN() > search.getISBN()) {
+				last = mid - 1;
+			}
+			else {
+				first = mid + 1;
+			}
+		}
+	}
+	std::cout << "not found, returning ...\n";
+	return mid;
 }
 
 // Refund a book
@@ -202,8 +247,16 @@ void CashRegister::refundBook(Bundle &b)
 		// Prompt user for ISBN
 		int userISBN;
 		std::cout << "ISBN: ";
-		std::cin >> userISBN;
-		std::cin.ignore();
+		std::string input;
+		getline(std::cin, input);
+		// Check for invalid inputs
+		try {
+			userISBN = std::stoi(input);
+		}
+		catch (...)
+		{
+			userISBN = 0;
+		}
 		std::cout << std::endl;
 
 		// Search mainbundle for userISBN
@@ -223,13 +276,19 @@ void CashRegister::refundBook(Bundle &b)
 
 			// If refund is confirmed
 			if (confirm == "y" || confirm == "Y") {
-				// Add 1 to book stock
-				increaseStock(b, b[pos]);
-				// Reduce values in register
-				refundMoney(b[pos]);
-				//Print confirmation
-				std::cout << std::setprecision(2) << std::fixed;
-				std::cout << "$" << b[pos].getPrice() + (b[pos].getPrice() * (TAX_RATE / 100)) << " was refunded.\n\n";
+				// If balance is less than refund
+				if (balance < b[pos].getPrice() + (b[pos].getPrice() * (TAX_RATE / 100))) {
+					std::cout << "Not enough money in register, refund cancelled.\n";
+				}
+				else {
+					// Add 1 to book stock
+					increaseStock(b, b[pos]);
+					// Reduce values in register
+					refundMoney(b[pos]);
+					// Print confirmation
+					std::cout << std::setprecision(2) << std::fixed;
+					std::cout << "$" << b[pos].getPrice() + (b[pos].getPrice() * (TAX_RATE / 100)) << " was refunded.\n\n";
+				}
 			}
 			// If refund is not confirmed
 			else {
@@ -265,7 +324,7 @@ void CashRegister::sortISBN(Bundle &b)
 		}
 		if (swapInd != ind)
 		{
-			b.getArray().swap(b[ind], b[swapInd]); //***swap
+			b.getArray().swap(b[ind], b[swapInd]);
 		}
 	}
 }
@@ -300,7 +359,7 @@ int CashRegister::searchISBN(Bundle &b, int search)
 void CashRegister::printBook(Book book) {
 	std::cout << std::setprecision(2) << std::fixed;
 	std::cout << book.getTitle() << std::endl;
-	std::cout << "by " << std::setw(60) << std::left << book.getAuthor() << "$" << book.getPrice() << std::endl;
+	std::cout << "by " << std::setw(57) << std::left << book.getAuthor() << "$" << book.getPrice() << std::endl;
 	std::cout << std::endl;
 }
 
@@ -312,15 +371,15 @@ void CashRegister::printReceipt(ShoppingCart c)
 	std::cout << "---------------------------------------------------------------------------\n";
 	printCenter("Serendipity Booksellers Order Summary");
 	printCenter(currentDate.toString());
-	std::cout << "---------------------------------------------------------------------------\n";
+	std::cout << "---------------------------------------------------------------------------\n\n";
 	c.printAll();
-	std::cout << "---------------------------------------------------------------------------\n";
+	std::cout << "---------------------------------------------------------------------------\n\n";
 	std::cout << std::setprecision(2) << std::fixed;
 	std::cout << std::setw(60) << std::left << "Subtotal:" << "$" << c.getSubtotal() << std::endl;
 	std::cout << std::setw(60) << std::left << "Tax:" << "$" << c.getTax() << std::endl;
 	std::cout << std::setw(60) << std::left << "Total:" << "$" << c.getTotalCost() << std::endl << std::endl;
 	std::cout << std::setw(60) << std::left << "Amount Paid:" << "$" << c.getAmountPaid() << std::endl;
-	std::cout << std::setw(60) << std::left << "Change:" << "$" << c.getChange() << std::endl;
+	std::cout << std::setw(60) << std::left << "Change:" << "$" << c.getChange() << std::endl << std::endl;
 	std::cout << "---------------------------------------------------------------------------\n";
 
 	std::cout << "\n\n";
@@ -332,7 +391,6 @@ void CashRegister::printReceipt(ShoppingCart c)
 // Print sales report of cash register
 void CashRegister::printSalesReport()					
 {
-	clearScreen();
 	std::cout << "---------------------------------------------------------------------------\n";
 	printCenter("Serendipity Booksellers Sales Report");
 	printCenter(currentDate.toString());
@@ -383,8 +441,19 @@ void CashRegister::getInput()
 		std::cout << "What would you like to do?" << std::endl;
 		std::string input;
 		getline(std::cin, input);
-		chosenOption = std::stoi(input);
+		try {
+			chosenOption = std::stoi(input);
+		}
+		catch (...)
+		{
+			chosenOption = -1;
+		}
+		if (chosenOption < 0 || chosenOption > 4)
+		{
+			std::cout << "Enter a valid number" << std::endl;
+		}
 	} while (chosenOption < 0 || chosenOption > 4);
+	clearScreen();
 }
 
 void CashRegister::runOptions()
