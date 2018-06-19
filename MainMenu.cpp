@@ -9,13 +9,13 @@ void MainMenu::runOptions()
 	switch (chosenOption)
 	{
 	case 1:
-		useReportModule(menuBooks);
+		useInventoryModule(&menuBooks);
 		break;
 	case 2:
 		useCashierModule(menuBooks);
 		break;
 	case 3:
-		useInventoryModule(menuBooks);
+		useReportModule(menuBooks);
 		break;
 	default:
 		isUsingMenu = false;
@@ -35,8 +35,9 @@ void MainMenu::useCashierModule(Bundle b)
 	cashRegister.runMenu();
 
 }
-void MainMenu::useInventoryModule(Bundle b)
+void MainMenu::useInventoryModule(Bundle *b)
 {
-	Inventory inventory = Inventory(menuBooks);
+	Inventory inventory = Inventory(&menuBooks);
 	inventory.runMenu();
 }
+
