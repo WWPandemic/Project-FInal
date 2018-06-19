@@ -14,16 +14,17 @@ private:
 			getline(std::cin, input);
 			chosenOption = std::stoi(input);
 		} while (chosenOption < 0 || chosenOption > 4);
+		clearScreen();
 	}
 	void runOptions();
 	void useReportModule(Bundle b);
 	void useCashierModule(Bundle b);
-	void useInventoryModule(Bundle b);
+	void useInventoryModule(Bundle *b);
 public:
-	MainMenu()
+	MainMenu(Bundle b)
 	{
 		chosenOption = 4;//defaults to exit
-		
+		menuBooks = b;
 		introductions[0] = "---------------------------------------------------------------------------";
 		introductions[1] = "                    Welcome to the Serepdipity Bookstore:";
 		introductions[2] = "This is a point-of-sale program to help the Serepdipity employees";
