@@ -11,10 +11,19 @@ void Report::getInput()
 		std::cout << "What would you like to do?" << std::endl;
 		std::string input;
 		getline(std::cin, input);
-		chosenOption = std::stoi(input);
+		try {
+			chosenOption = std::stoi(input);
+		}
+		catch (...)
+		{
+			chosenOption = -1;
+		}
+		if (chosenOption < 0 || chosenOption > 7)
+		{
+			std::cout << "Enter a valid number" << std::endl;
+		}
 	} while (chosenOption < 0 || chosenOption > 7);
 	clearScreen();
-}
 void Report::runOptions()
 {
 	switch (chosenOption)
