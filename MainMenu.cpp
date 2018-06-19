@@ -4,6 +4,28 @@
 #include "CashRegister.h"
 #include "Inventory.h"
 
+void MainMenu::getInput()
+{
+	do
+	{
+		std::cout << "What would you like to do?" << std::endl;
+		std::string input;
+		getline(std::cin, input);
+		try {
+			chosenOption = std::stoi(input);
+		}
+		catch (...)
+		{
+			chosenOption = -1;
+		}
+		if (chosenOption < 0 || chosenOption > 4)
+		{
+			std::cout << "Enter a valid number" << std::endl;
+		}
+	} while (chosenOption < 0 || chosenOption > 4);
+	clearScreen();
+}
+
 void MainMenu::runOptions()
 {
 	switch (chosenOption)
