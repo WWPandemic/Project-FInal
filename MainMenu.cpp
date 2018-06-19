@@ -47,19 +47,19 @@ void MainMenu::runOptions()
 
 void MainMenu::useReportModule(Bundle b)
 {
-	Report reportMenu = Report(menuBooks);
+	Report reportMenu = Report(b);
 	reportMenu.runMenu();
 
 }
 void MainMenu::useCashierModule(Bundle b)
 {
-	CashRegister cashRegister = CashRegister(menuBooks);
+	CashRegister cashRegister = CashRegister(b);
 	cashRegister.runMenu();
 
 }
 void MainMenu::useInventoryModule(Bundle *b)
 {
-	Inventory inventory = Inventory(&menuBooks);
+	Inventory inventory = Inventory(b);
 	inventory.runMenu();
 }
 
