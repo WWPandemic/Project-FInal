@@ -5,14 +5,14 @@ Bundle::Bundle() : m_books(25) { m_size = 0; }
 Bundle::Bundle(int size) : m_books(size) { m_size = 0; } 
 Bundle::Bundle(const Bundle &src) : m_books(src.getSize()) { 
 	m_size = src.getSize();
-	for (int i = 0; i < m_size; i++)
+	for (int i = 0; i < m_size; i++) //copys every book in src over to the newly comstructed bundle
 		m_books[i] = src[i];
 }
 
 Bundle& Bundle::operator=(const Bundle& src) {  
 	m_size = src.getSize();
 	m_books = Array<Book>(m_size);
-	for (int i = 0; i < m_size; i++)
+	for (int i = 0; i < m_size; i++) //copys every book in src over to the newly comstructed bundle
 		m_books[i] = src[i];
 	return *this;
 }
@@ -24,7 +24,7 @@ Book& Bundle::operator[](int index) const {
 std::ostream& operator<<(std::ostream& os, const Bundle& src) {
 	int size = src.getSize();
 	for (int i = 0; i < size; i++)
-		os << src[i] << std::endl;
+		os << src[i] << std::endl; //sends the book at the given index to the ostream
 	return os;
 }
 
@@ -49,7 +49,7 @@ void Bundle::addBooks(const Bundle &b) {
 
 void Bundle::removeBook(int index) {
 	if (ensureIndex(index))
-		for (int i = index; i < m_size; i++)
+		for (int i = index; i < m_size; i++) //swaps books around such that the book at the given index is pushed out of scope
 			m_books.swap(m_books[i], m_books[i + 1]);
 	m_size--;
 }
@@ -101,11 +101,12 @@ int Bundle::getSize() const {
 	return m_size;
 }
 
-//this method is essentially a reverse binary search
+//this method is modified binary search
 //instead of finding the index of a match (or lack their of)
 //it instead finds the pos of where the book sould slot into the array (such that everything is in order)
-//Thus when working correctly, everything sould be in order at all times, and a dedicated sort method is not needed for bundle
-int Bundle::findPos(const Book &b) {
+//smaller than the book at the returned index, larger than the book at the index-1
+//Thus when working correctly, every book should be in order at all times, and as such a dedicated sort method is not needed for bundle
+int Bundle::findPos(const Book &b) { 
 	int min = 0, middle = 0, max = m_size;
 	while (min <= max) {
 		middle = (min + max) / 2;
@@ -123,27 +124,27 @@ int Bundle::findPos(const Book &b) {
 }
 
 int Bundle::findIndex(Book &b) {
-	int min = 0, middle = 0, max = m_size - 1;
+	int min = 0, middle = 0, max = m_size - 1; //Basic binary search algorithm
 	while (min <= max) {
 		middle = (min + max) / 2;
-		if (b == m_books[middle]) {
-			return middle;
+		if (b == m_books[middle]) { //if a match is found
+			return middle; //return the index
 		}
 		else if (b < m_books[middle])
 			max = middle - 1;
 		else
 			min = middle + 1;
 	}
-	return middle;
+	return -1; //if no match is found at all, returns -1;
 }
 
-//returns an index location of a book with the given title
+//returns the first index location of a book with the given title
 int Bundle::findFirstIndex(std::string title) {
-	int min = 0, middle = 0, max = m_size - 1;
+	int min = 0, middle = 0, max = m_size - 1; //general binary search algorithm
 	while (min <= max) {
 		middle = (min + max) / 2;
 		if (title == m_books[middle].getTitle()) {
-			for (; middle - 1 >= 0 && m_books[middle - 1].getTitle() == title; middle--);
+			for (; middle - 1 >= 0 && m_books[middle - 1].getTitle() == title; middle--); //moving the index to the lower bound
 			return middle;
 		}
 		else if (title < m_books[middle].getTitle())
@@ -153,14 +154,14 @@ int Bundle::findFirstIndex(std::string title) {
 	}
 	return middle;
 }
-
+//its odd, but takes in an int[2] array along with the title being searched for, as otherwise it could potentially cause memory leaks
 void Bundle::findIndexBounds(std::string title, int index[2]) {
-	int min = 0, middle = 0, max = m_size - 1;
+	int min = 0, middle = 0, max = m_size - 1; //other than the for loops, this is a regualr binary search
 	while (min <= max) {
 		middle = (min + max) / 2;
 		if (title == m_books[middle].getTitle()) {
-			for (index[0] = middle; index[0] - 1 >= 0 && m_books[index[0] - 1].getTitle() == title; index[0]--);
-			for (index[1] = middle; index[1] + 1 < m_size && m_books[index[1] + 1].getTitle() == title; index[1]++);
+			for (index[0] = middle; index[0] - 1 >= 0 && m_books[index[0] - 1].getTitle() == title; index[0]--); //this will become the index of the lower bound
+			for (index[1] = middle; index[1] + 1 < m_size && m_books[index[1] + 1].getTitle() == title; index[1]++); //this will become the index of the higher bound
 			break;
 		}
 		else if (title < m_books[middle].getTitle())
@@ -171,18 +172,14 @@ void Bundle::findIndexBounds(std::string title, int index[2]) {
 }
 
 bool Bundle::ensureIndex(int index) const {
-	if (index >= 0 && index < m_size)
+	if (index >= 0 && index < m_size) //checking to see if the index is greater than or equal to zero, or less then the size of the bundle
 		return true;
-	else {
-		std::ostringstream o;
-		o << "The index: " << index << " is out of bounds";
-		throw o.str();
-	}
+	return false;
 }
 
 bool Bundle::ensureSize(int size) {
-	if (size > m_books.getLength()) {
-		m_books.reSize(size);
+	if (size > m_books.getLength()) { //checking if the size is larger than size of the array
+		m_books.reSize(size); //resizing the array to the new size
 		return true;
 	}
 	return false;
@@ -190,16 +187,4 @@ bool Bundle::ensureSize(int size) {
 
 Array<Book> Bundle::getArray() const {
 	return m_books;
-}
-
-void Bundle::shuffle(int index, int num) {
-	if (m_books.ensureIndex(index)) {
-		m_books.ensureLength(m_size + num);
-		for (int i = m_size-1; i >= index; i--)
-			m_books.swap(m_books[i], m_books[i + num]);
-		m_size += num;
-	}
-	else {
-		std::cout << "Yeah, something went wrong" << std::endl;
-	}
 }
