@@ -3,7 +3,7 @@
     Author:
     Parameters:
             int someInt // description
-    UI Output:
+    Returns:
             
     Description:
 */
