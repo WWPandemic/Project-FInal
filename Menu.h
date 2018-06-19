@@ -10,6 +10,7 @@ private:
 	virtual void getInput();
 	virtual void runOptions();
 protected:
+	void clearScreen();
 	bool isUsingMenu;
 	int chosenOption;
 	std::string introductions[100];
