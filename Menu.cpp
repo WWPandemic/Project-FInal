@@ -18,6 +18,10 @@ void Menu::runOptions()
 {
 	isUsingMenu = false;
 }
+void Menu::clearScreen()
+{
+	system("CLS");
+}
 void Menu::runMenu()
 {
 	do
