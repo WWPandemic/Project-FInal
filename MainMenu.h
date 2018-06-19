@@ -5,17 +5,7 @@ class MainMenu : public Menu
 {
 private:
 	//outputIntroduction unmodified
-	void getInput()
-	{
-		do
-		{
-			std::cout << "What would you like to do?" << std::endl;
-			std::string input;
-			getline(std::cin, input);
-			chosenOption = std::stoi(input);
-		} while (chosenOption < 0 || chosenOption > 4);
-		clearScreen();
-	}
+	void getInput();
 	void runOptions();
 	void useReportModule(Bundle b);
 	void useCashierModule(Bundle b);
