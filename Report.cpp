@@ -13,6 +13,7 @@ void Report::getInput()
 		getline(std::cin, input);
 		chosenOption = std::stoi(input);
 	} while (chosenOption < 0 || chosenOption > 7);
+	clearScreen();
 }
 void Report::runOptions()
 {
