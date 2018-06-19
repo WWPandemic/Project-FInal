@@ -4,20 +4,24 @@
 #include <string>
 #include "CashRegister.h"
 
-//**************************
-//* Constructor definition *
-//**************************
-
+/*
+Constructor:	ShoppingCart
+Author:			Terry Chiem
+Parameters:		Bundle &b - A reference to the bundle created from BookReader
+Returns:		CashRegister object
+Description:	This constructor creates a CashRegister object which allows
+				the user to navigate a menu to access its functions.
+*/
 CashRegister::CashRegister(Bundle &b)
 {
-	menuBooks = b;
+	bPtr = &b;
 	chosenOption = 4;
-
 	totalSales = 0.0;
 	totalTax = 0.0;
 	totalProfit = 0.0;
 	transactions = 0;
 	booksSold = 0;
+	setUpRegister();
 
 	introductions[0] = "---------------------------------------------------------------------------";
 	introductions[1] = "                      Welcome to the Cashier module:";
@@ -31,17 +35,18 @@ CashRegister::CashRegister(Bundle &b)
 	introductions[9] = "    Lists sales, profit and tax details";
 	introductions[10] = "4 - Go back to the main menu";
 	introductions[11] = "";
-	introductions[12] = "---------------------------------------------------------------------------";
-	usedIntroLines = 13;
-
-	setUpRegister();
+	introductions[12] = "";
+	introductions[13] = "---------------------------------------------------------------------------";
+	usedIntroLines = 14;
 }
-
-//***********************
-//* Mutator definitions *
-//***********************
-
-// Set date and balance
+/*
+Function:		setUpRegister
+Author :		Terry Chiem
+Parameters :	none
+Returns :		none
+Description :	Prompts user to enter date and register balance then
+				initializes those variables.
+*/
 void CashRegister::setUpRegister()
 {
 	clearScreen();
@@ -85,44 +90,68 @@ void CashRegister::setUpRegister()
 	currentDate = Date(m, d, y);
 	balance = bal;
 }
-
-// Add amount to balance
+/*
+Function:		addBalance
+Author :		Terry Chiem
+Parameters :	double b
+Returns :		none
+Description :	Adds the amount to balance.
+*/
 void CashRegister::addBalance(double b)
 {
 	balance += b;
 }
-
-// Add amount to totalSales
+/*
+Function:		addSales
+Author :		Terry Chiem
+Parameters :	double s
+Returns :		none
+Description :	Adds the amount to totalSales.
+*/
 void CashRegister::addSales(double s)
 {
 	totalSales += s;
 }
-
-// Add amount to totalTax
+/*
+Function:		addTax
+Author :		Terry Chiem
+Parameters :	double t
+Returns :		none
+Description :	Adds the amount to totalTax.
+*/
 void CashRegister::addTax(double t)
 {
 	totalTax += t;
 }
-
-// Add amount to totalProfit
+/*
+Function:		addProfit
+Author :		Terry Chiem
+Parameters :	double p
+Returns :		none
+Description :	Adds the amount to totalProfit.
+*/
 void CashRegister::addProfit(double p)
 {
 	totalProfit += p;
 }
-
-// Add one to transactions
-void CashRegister::addTransaction()
-{
-	transactions++;
-}
-
-// Add amount to booksSold
+/*
+Function:		addBooksSold
+Author :		Terry Chiem
+Parameters :	int b - Amount of books
+Returns :		none
+Description :	Adds the amount to booksSold.
+*/
 void CashRegister::addBookSold(int b)
 {
 	booksSold += b;
 }
-
-// Reduce book amounts from register
+/*
+Function:		refundMoney
+Author :		Terry Chiem
+Parameters :	Book b - Book to be refunded
+Returns :		none
+Description :	Reduces register values by the book's price.
+*/
 void CashRegister::refundMoney(Book b)
 {
 	double retailPrice = b.getPrice();
@@ -132,19 +161,39 @@ void CashRegister::refundMoney(Book b)
 	totalProfit -= retailPrice - b.getCost();
 	booksSold--;
 }
-
-//************************
-//* Function definitions *
-//************************
-
-// Return date as string
+/*
+Function:		getConfirmation
+Author :		Terry Chiem
+Parameters :	none
+Returns :		string
+Description :	Gets the next input and returns it as a string.
+*/
+std::string CashRegister::getConfirmation() {
+	std::string input;
+	getline(std::cin, input);
+	return input;
+}
+/*
+Function:		getDate
+Author :		Terry Chiem
+Parameters :	none
+Returns :		string
+Description :	Returns the current date as a string.
+*/
 std::string CashRegister::getDate()
 {
 	return currentDate.toString();
 }
-
-// Create a new transaction
-void CashRegister::newTransaction(Bundle &b)
+/*
+Function:		newTransaction
+Author :		Terry Chiem
+Parameters :	Bundle *b - A pointer to a reference of the main bundle
+Returns :		none
+Description :	Creates a new ShoppingCart where the user adds books and payment.
+				If the transaction is complete, process the cart's values to the
+				register, adjust inventory and print a receipt.
+*/
+void CashRegister::newTransaction(Bundle *b)
 {
 	clearScreen();
 	std::cout << "---------------------------------------------------------------------------\n";
@@ -170,8 +219,13 @@ void CashRegister::newTransaction(Bundle &b)
 	}
 	clearScreen();
 }
-
-// Add cart values to register
+/*
+Function:		processCart
+Author :		Terry Chiem
+Parameters :	ShoppingCart c - Completed cart from newTransaction
+Returns :		none
+Description :	Adjust register values based on the books in the cart.
+*/
 void CashRegister::processCart(ShoppingCart c)		
 {
 	addBalance(c.getTotalCost());
@@ -181,43 +235,64 @@ void CashRegister::processCart(ShoppingCart c)
 	addBookSold(c.getSize());
 	transactions++;
 }
-
-// Adjust inventory based on purchases
-void CashRegister::reduceStock(Bundle &b, ShoppingCart c)	
-{	
+/*
+Function:		reduceStock
+Author :		Terry Chiem
+Parameters :	Bundle *b - A pointer to a reference of the main bundle
+				ShoppingCart c - Completed cart from newTransaction
+Returns :		none
+Description :	Adjusts bundle quantities for each book in the cart.
+*/
+void CashRegister::reduceStock(Bundle *b, ShoppingCart c)
+{
 	for (int cartBook = 0; cartBook < c.getSize(); cartBook++)		// repeat for every book in cart
 	{
 		int pos = findIndex(b, c[cartBook]);
 
 		if (pos >= 0) {
-			b[pos].setQuantity(b[pos].getQuantity() - 1);
+			b->setBookQuantity(pos, (b->getArray()[pos].getQuantity() - 1));
 		}
 	}
-
 }
-
-// Add book back to inventory from refund
-void CashRegister::increaseStock(Bundle &b, Book book) 
+/*
+Function:		increaseStock
+Author :		Terry Chiem
+Parameters :	Bundle *b - A pointer to a reference of the main bundle
+				Book book - Book that was refunded
+Returns :		none
+Description :	Increases the quantity of the refunded book by one.
+*/
+void CashRegister::increaseStock(Bundle *b, Book book) 
 {
+	Array<Book> bp = b->getArray();
 	int pos = findIndex(b, book);
 
 	if (pos >= 0) {
-		b[pos].setQuantity(b[pos].getQuantity() + 1);
+		b->setBookQuantity(pos, (bp[pos].getQuantity() + 1));
 	}
 }
+/*
+Function:		findIndex
+Author :		Terry Chiem
+Parameters :	Bundle *b - A pointer to a reference of the main bundle
+				Book search - Book search item
+Returns :		int
+Description :	Performs a binary search to locate the index position of search item.
+*/
+int CashRegister::findIndex(const Bundle *b, Book search) {
+	Array<Book> bp = b->getArray();
 
-int CashRegister::findIndex(const Bundle &b, Book search) {
 	int first = 0;
-	int last = b.getSize();
+	int last = b->getSize();
 	int mid = 0;
 
 	while (first <= last) {
 		mid = (first + last) / 2;
-		if (b[mid].getISBN() == search.getISBN()) {
+		if (bp[mid] == search) {
 			return mid;		// If found, return index
 		}
 		else {
-			if (b[mid].getISBN() > search.getISBN()) {
+			if (bp[mid] > search) {
 				last = mid - 1;
 			}
 			else {
@@ -228,9 +303,14 @@ int CashRegister::findIndex(const Bundle &b, Book search) {
 	std::cout << "not found, returning ...\n";
 	return mid;
 }
-
-// Refund a book
-void CashRegister::refundBook(Bundle &b)					
+/*
+Function:		refundBook
+Author :		Terry Chiem
+Parameters :	Bundle *b - A pointer to a reference of the main bundle
+Returns :		none
+Description :	Prompts the user for book ISBN to add to refund.
+*/
+void CashRegister::refundBook(Bundle *b)					
 {
 	clearScreen();
 	std::cout << "---------------------------------------------------------------------------\n";
@@ -240,7 +320,7 @@ void CashRegister::refundBook(Bundle &b)
 	std::string repeat;		// To loop refunding of books
 
 	// Sort bundle by ISBN for searchability
-	sortISBN(b);
+	Bundle sorted = sortISBN(b);
 
 	std::cout << "Please enter Book ISBN to process refund.\n";
 	do {
@@ -260,13 +340,13 @@ void CashRegister::refundBook(Bundle &b)
 		std::cout << std::endl;
 
 		// Search mainbundle for userISBN
-		int pos = searchISBN(b, userISBN);	
+		int pos = searchISBN(sorted, userISBN);	
 
 		// If book was found
 		if (pos >= 0) {
 			// Print book details
 			std::cout << "---------------------------------------------------------------------------\n\n";
-			printBook(b[pos]);
+			printBook(sorted[pos]);
 			std::cout << "---------------------------------------------------------------------------\n";
 
 			// Prompt user for confirmation to refund
@@ -277,17 +357,17 @@ void CashRegister::refundBook(Bundle &b)
 			// If refund is confirmed
 			if (confirm == "y" || confirm == "Y") {
 				// If balance is less than refund
-				if (balance < b[pos].getPrice() + (b[pos].getPrice() * (TAX_RATE / 100))) {
+				if (balance < sorted[pos].getPrice() + (sorted[pos].getPrice() * (TAX_RATE / 100))) {
 					std::cout << "Not enough money in register, refund cancelled.\n";
 				}
 				else {
 					// Add 1 to book stock
-					increaseStock(b, b[pos]);
+					increaseStock(b, sorted[pos]);
 					// Reduce values in register
-					refundMoney(b[pos]);
+					refundMoney(sorted[pos]);
 					// Print confirmation
 					std::cout << std::setprecision(2) << std::fixed;
-					std::cout << "$" << b[pos].getPrice() + (b[pos].getPrice() * (TAX_RATE / 100)) << " was refunded.\n\n";
+					std::cout << "$" << sorted[pos].getPrice() + (sorted[pos].getPrice() * (TAX_RATE / 100)) << " was refunded.\n\n";
 				}
 			}
 			// If refund is not confirmed
@@ -306,31 +386,47 @@ void CashRegister::refundBook(Bundle &b)
 	} while (repeat == "y" || repeat == "Y");
 	clearScreen();
 }
-
-// Sort main bundle by isbn
-void CashRegister::sortISBN(Bundle &b)				
+/*
+Function:		sortISBN
+Author :		Terry Chiem
+Parameters :	Bundle *b - A pointer to a reference of the main bundle
+Returns :		Bundle
+Description :	Performs a selective sort by ISBN on the main bundle and
+				returns a copy of it.
+*/
+Bundle CashRegister::sortISBN(Bundle *b)
 {
-	for (int ind = 0; ind < b.getSize(); ind++)
+	Bundle sorted = *b;
+
+	for (int ind = 0; ind < b->getSize(); ind++)
 	{
-		int minISBN = b[ind].getISBN();
+		int minISBN = sorted[ind].getISBN();
 		int swapInd = ind;
-		for (int target = ind; target < b.getSize(); target++)
+		for (int target = ind; target < b->getSize(); target++)
 		{
-			if (b[target].getISBN() < minISBN)
+			if (sorted[target].getISBN() < minISBN)
 			{
 				swapInd = target;
-				minISBN = b[target].getISBN();
+				minISBN = sorted[target].getISBN();
 			}
 		}
 		if (swapInd != ind)
 		{
-			b.getArray().swap(b[ind], b[swapInd]);
+			sorted.getArray().swap(sorted[ind], sorted[swapInd]);
 		}
 	}
+	return sorted;
 }
-
-// Search main bundle for isbn, returns index position or -1
-int CashRegister::searchISBN(Bundle &b, int search)		
+/*
+Function:		searchISBN
+Author :		Terry Chiem
+Parameters :	Bundle *b - A pointer to a reference of the main bundle
+				int search - The search item (ISBN) specified by the user
+Returns :		int
+Description :	Performs a binary search for the search item and returns
+				its index position if found, a -1 if not found.
+*/
+int CashRegister::searchISBN(Bundle b, int search)		
 {
 	int first = 0;
 	int last = b.getSize();
@@ -354,17 +450,26 @@ int CashRegister::searchISBN(Bundle &b, int search)
 	// If not found, return -1
 	return -1;
 }
-
-// Print book details
+/*
+Function:		printBook
+Author :		Terry Chiem
+Parameters :	Book book - Item to be printed
+Returns :		none
+Description :	Prints out the book's details (title, author, price).
+*/
 void CashRegister::printBook(Book book) {
 	std::cout << std::setprecision(2) << std::fixed;
 	std::cout << book.getTitle() << std::endl;
 	std::cout << "by " << std::setw(57) << std::left << book.getAuthor() << "$" << book.getPrice() << std::endl;
 	std::cout << std::endl;
 }
-
-
-// Print details of current transaction
+/*
+Function:		printReceipt
+Author :		Terry Chiem
+Parameters :	ShoppingCart c - Completed cart from newTransaction
+Returns :		none
+Description :	Prints the details of the cart.
+*/
 void CashRegister::printReceipt(ShoppingCart c)			
 {
 	clearScreen();
@@ -387,8 +492,13 @@ void CashRegister::printReceipt(ShoppingCart c)
 	std::string pause = getConfirmation();
 	clearScreen();
 }
-
-// Print sales report of cash register
+/*
+Function:		printSalesReport
+Author :		Terry Chiem
+Parameters :	none
+Returns :		none
+Description :	Prints the details of the register.
+*/
 void CashRegister::printSalesReport()					
 {
 	std::cout << "---------------------------------------------------------------------------\n";
@@ -409,31 +519,36 @@ void CashRegister::printSalesReport()
 	std::string pause = getConfirmation();
 	clearScreen();
 }
-
-// Print center text in between line breaks
+/*
+Function:		printCenter
+Author :		Terry Chiem
+Parameters :	string text - Text to be printed
+Returns :		none
+Description :	Prints out the text centered based on the length of the line breaks.
+*/
 void CashRegister::printCenter(std::string text) {
 	int lineLength = 76;
 	int spacing = (lineLength / 2) + (text.length() / 2);
 	std::cout << std::setw(spacing) << std::right << text << std::endl;
 }
-
-// Clear text from console
+/*
+Function:		clearScreen
+Author :		Terry Chiem
+Parameters :	none
+Returns :		none
+Description :	Clears the console.
+*/
 void CashRegister::clearScreen()
 {
 	system("CLS");
 }
-
-// Get confirmation
-std::string CashRegister::getConfirmation() {
-	std::string input;
-	getline(std::cin, input);
-	return input;
-}
-
-//********************
-//* Menu definitions *
-//********************
-
+/*
+Function:		getInput
+Author :		Terry Chiem/Evren Keskin
+Parameters :	none
+Returns :		none
+Description :	Runs a loop to get a menu choice from user.
+*/
 void CashRegister::getInput()
 {
 	do
@@ -455,16 +570,22 @@ void CashRegister::getInput()
 	} while (chosenOption < 0 || chosenOption > 4);
 	clearScreen();
 }
-
+/*
+Function:		runOptions
+Author :		Terry Chiem/Evren Keskin
+Parameters :	none
+Returns :		none
+Description :	Performs a menu function based on the user's chosen menu option.
+*/
 void CashRegister::runOptions()
 {
 	switch (chosenOption)
 	{
 	case 1:
-		newTransaction(menuBooks);
+		newTransaction(bPtr);
 		break;
 	case 2:
-		refundBook(menuBooks);
+		refundBook(bPtr);
 		break;
 	case 3:
 		printSalesReport();
