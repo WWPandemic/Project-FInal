@@ -17,7 +17,6 @@ private:
 	void showAgeList(Bundle b);
 	void pauseMenu();
 public:
-	//Report();
 	Report(Bundle b);
 };
 
