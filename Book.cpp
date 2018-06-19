@@ -170,7 +170,7 @@ std::string Book::toString() const{
 	o << m_title
 		<< " writen by " << m_author
 		<< " published by " << m_publisher
-		<< " with an ISNB of " << m_ISBN << std::endl;
+		<< " with an ISBN of " << m_ISBN << std::endl;
 	o << "\tAdded on " << m_date
 		<< " with " << m_quantity << " copies in stock"
 		<< " each costing $" << m_cost
