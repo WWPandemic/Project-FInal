@@ -167,14 +167,14 @@ void Book::setPrice(double retailPrice) {
 
 std::string Book::toString() const{
 	std::ostringstream o;
-	o << m_title 
-		<< " " << m_author 
-		<< " " << m_publisher
-		<< " " << m_ISBN
-		<< " " << m_date
-		<< " " << m_quantity
-		<< " " << m_cost
-		<< " " << m_price;
+	o << m_title
+		<< " writen by " << m_author
+		<< " published by " << m_publisher
+		<< " with an ISNB of " << m_ISBN << std::endl;
+	o << "\tAdded on " << m_date
+		<< " with " << m_quantity << " copies in stock"
+		<< " each costing $" << m_cost
+		<< " and selling for $" << m_price;
 	return o.str();
 }
 
