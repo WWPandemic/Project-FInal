@@ -36,6 +36,15 @@ public:
 	double getBookCost(int index) const;
 	double getBookPrice(int index) const;
 
+	void setBookTitle(int index, std::string title);
+	void setBookAuthor(int index, std::string author);
+	void setBookPublisher(int index, std::string publisher);
+	void setBookISBN(int index, int ISBN);
+	void setBookDate(int index, Date date);
+	void setBookQuantity(int index, int quantity);
+	void setBookCost(int index, double cost);
+	void setBookPrice(int index,double price);
+
 	int findPos(const Book &b);
 	int getSize() const;
 	

@@ -1,15 +1,15 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "Bundle.h"
 
-Bundle::Bundle() : m_books(25) { m_size = 0; }  //creates an empty bundle of a default size of 25
-Bundle::Bundle(int size) : m_books(size) { m_size = 0; } //creates an empty bundle of the specified size
-Bundle::Bundle(const Bundle &src) : m_books(src.getSize()) { //creates a bundle containing all the books contained within the given bundle
+Bundle::Bundle() : m_books(25) { m_size = 0; }  
+Bundle::Bundle(int size) : m_books(size) { m_size = 0; } 
+Bundle::Bundle(const Bundle &src) : m_books(src.getSize()) { 
 	m_size = src.getSize();
 	for (int i = 0; i < m_size; i++)
 		m_books[i] = src[i];
 }
 
-Bundle& Bundle::operator=(const Bundle& src) {  //basic copy constructer, just copying array contents as well
+Bundle& Bundle::operator=(const Bundle& src) {  
 	m_size = src.getSize();
 	m_books = Array<Book>(m_size);
 	for (int i = 0; i < m_size; i++)
@@ -87,6 +87,15 @@ Date Bundle::getBookDate(int index) const { if (ensureIndex(index)) return m_boo
 int Bundle::getBookQuantity(int index) const { if (ensureIndex(index)) return m_books[index].getQuantity(); }
 double Bundle::getBookCost(int index) const { if (ensureIndex(index)) return m_books[index].getCost(); }
 double Bundle::getBookPrice(int index) const { if (ensureIndex(index)) return m_books[index].getPrice(); }
+
+void Bundle::setBookTitle(int index, std::string title) { if (ensureIndex(index)) m_books[index].setTitle(title); }
+void Bundle::setBookAuthor(int index, std::string author) { if (ensureIndex(index)) m_books[index].setAuthor(author); }
+void Bundle::setBookPublisher(int index, std::string publisher) { if (ensureIndex(index)) m_books[index].setPublisher(publisher); }
+void Bundle::setBookISBN(int index, int ISBN) { if (ensureIndex(index)) m_books[index].setISBN(ISBN); }
+void Bundle::setBookDate(int index, Date date) { if (ensureIndex(index)) m_books[index].setDate(date); }
+void Bundle::setBookQuantity(int index, int quantity) { if (ensureIndex(index)) m_books[index].setQuantity(quantity); }
+void Bundle::setBookCost(int index, double cost) { if (ensureIndex(index)) m_books[index].setCost(cost); }
+void Bundle::setBookPrice(int index, double price) { if (ensureIndex(index)) m_books[index].setPrice(price); }
 
 int Bundle::getSize() const {
 	return m_size;
