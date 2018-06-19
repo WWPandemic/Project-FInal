@@ -508,7 +508,7 @@ void CashRegister::printSalesReport()
 	std::cout << std::setprecision(2) << std::fixed << std::endl;
 	std::cout << std::setw(60) << std::left << "Register Balance:" << "$" << balance << std::endl;
 	std::cout << std::setw(60) << std::left << "Total Sales:" << "$" << totalSales << std::endl;
-	std::cout << std::setw(60) << std::left << "Total Tax:" << "$" << totalTax << std::endl;
+	std::cout << std::setw(60) << std::left << "Total Tax Collected:" << "$" << totalTax << std::endl;
 	std::cout << std::setw(60) << std::left << "Total Profit:" << "$" << totalProfit << std::endl;
 	std::cout << std::setw(60) << std::left << "Number of Transactions:" << transactions << std::endl;
 	std::cout << std::setw(60) << std::left << "Number of Books Sold:" << booksSold << std::endl << std::endl;
