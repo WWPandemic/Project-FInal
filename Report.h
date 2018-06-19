@@ -15,7 +15,7 @@ private:
 	void showQuantityList(Bundle b);
 	void showCostList(Bundle b);
 	void showAgeList(Bundle b);
-	void sortAlphabetically(Bundle b);
+	void pauseMenu();
 public:
 	//Report();
 	Report(Bundle b);
