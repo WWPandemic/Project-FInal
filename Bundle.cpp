@@ -188,7 +188,6 @@ void Bundle::shuffle(int index, int num) {
 		m_books.ensureLength(m_size + num);
 		for (int i = m_size-1; i >= index; i--)
 			m_books.swap(m_books[i], m_books[i + num]);
-			//std::cout << i << " " << i + num << std::endl;
 		m_size += num;
 	}
 	else {

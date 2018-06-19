@@ -17,6 +17,13 @@ public:
 		m_length = nSize;
 	}
 
+	Array(const Array &src) {
+		m_length = src.getLength();
+		m_data = new T[m_length];
+		for (int i = 0; i < m_length; i++)
+			*(m_data + i) = src[i];
+	}
+
 	~Array() {
 		delete[] m_data;
 	}
@@ -40,9 +47,7 @@ public:
 		m_length = src.getLength();
 		m_data = new T[m_length];
 		for (int i = 0; i < m_length; i++)
-		{
 			*(m_data + i) = src[i];
-		}
 		return *this;
 	}
 
