@@ -2,7 +2,7 @@
 #include <cctype>
 #include "Inventory.h"
 
-void Inventory::runOptions()
+void Inventory::runOptions()//Runs function selected earlier by user.
 {
 	switch (chosenOption)
 	{
@@ -25,6 +25,12 @@ void Inventory::runOptions()
 	}
 }
 
+/*
+Prompts the user to enter the title or ISBN of desired book.
+If the user input begins and ends with a number it is assumed that the input is an ISBN and the search by ISBN function is called.
+If not the user input is assumed to be a title and the search by title function is called.
+If a valid index (i.e. greater than zero) is returned by either function the details of the book at that index are printed. 
+*/
 void Inventory::LookUpBooks()
 {
 	std::cout << "Enter the title or ISBN of the book: ";
@@ -42,11 +48,15 @@ void Inventory::LookUpBooks()
 		std::cout << "Book was not found.\n\n";
 	else
 	{
-		Book* b = books->getBundle();
-		(b + index)->print();
+		std::cout << (*books)[index] << std::endl;
 	}
 }
 
+/*
+The user is prompted to enter the desired number of books to add.
+The user is promted to enter the required data to make a book, the the book is added to the bundle.
+This is repeated the number of times the user specified.
+*/
 void Inventory::AddNewBooks()
 {
 	int count = 0;
@@ -88,12 +98,12 @@ void Inventory::AddNewBooks()
 		double price;
 		std::cin >> price;
 
-		int month = std::stoi(today.substr(0, 2));
-		int day = std::stoi(today.substr(3, 2));
+		int month = std::stoi(today.substr(0, 2));//Series of lines to find the date in a string entered MM/DD/YYYY
+		int day = std::stoi(today.substr(3, 2));  //And turn the string into three numbers representing the date.
 		int year = std::stoi(today.substr(6, 4));
 		Date todayDate(month, day, year);
 
-		books->addBook(title, author, publisher, ISBN, todayDate, quantity, cost, price);
+		(*books).addBook(title, author, publisher, ISBN, todayDate, quantity, cost, price);
 		
 		std::cin.ignore();
 		std::cout << "Book added.\n\n";
@@ -102,6 +112,14 @@ void Inventory::AddNewBooks()
 
 }
 
+/*
+Prompts the user to enter number of books to be deleted
+Prompts the user to enter the title or ISBN of the book to be deleted.
+If the user input begins and ends with a number it is assumed that the input is an ISBN and the search by ISBN function is called.
+If not the user input is assumed to be a title and the search by title function is called.
+If a valid index (i.e. greater than zero) is returned by either function the book is deleted from the bundle.
+This is repeated the specified number of times.
+*/
 void Inventory::DeleteBooks()
 {
 	int count = 0;
@@ -126,13 +144,20 @@ void Inventory::DeleteBooks()
 			std::cout << "Book was not found.\n\n";
 		else
 		{
-			books->removeBook(index);
+			(*books).removeBook(index);
 			std::cout << "Book deleted.\n\n";
 		}
 	}
 
 }
 
+/*
+Promts the user to enter the title or ISBN of the book to be edited.
+If the user input begins and ends with a number it is assumed that the input is an ISBN and the search by ISBN function is called.
+If not the user input is assumed to be a title and the search by title function is called.
+If a valid index (i.e. greater than zero) is returned by either function the user is given a menu a prompted to select a field to be edited.
+Once the selection is made the user is then prompted to enter the information they wish to change it to.
+*/
 void Inventory::EditBookInformation()
 {
 	std::cout << "Enter the title or ISBN of the book: ";
@@ -164,32 +189,31 @@ void Inventory::EditBookInformation()
 		std::cout << "What will you edit?" << std::endl;
 		std::string input;
 		getline(std::cin, input);
-		Book* b = books->getBundle();
 		switch (std::stoi(input))
 		{
 		case 1:
 			std::cout << "Enter a new title: ";
 			getline(std::cin, input);
-			(b + index)->setTitle(input);
+			(*books)[index].setTitle(input);
 			std::cout << "Title set\n";
 			break;
 		case 2:
 			std::cout << "Enter a new author: ";
 			getline(std::cin, input);
-			(b + index)->setAuthor(input);
+			(*books)[index].setAuthor(input);
 			std::cout << "Author set\n";
 			break;
 		case 3:
 			std::cout << "Enter a new publisher: ";
 			getline(std::cin, input);
-			(b + index)->setPublisher(input);
+			(*books)[index].setPublisher(input);
 			std::cout << "Publisher set\n";
 			break;
 		case 4:
 			std::cout << "Enter a new ISBN: ";
 			int ISBN;
 			std::cin >> ISBN;
-			(b + index)->setISBN(ISBN);
+			(*books)[index].setISBN(ISBN);
 			std::cout << "ISBN set\n";
 			break;
 		case 5:
@@ -200,29 +224,28 @@ void Inventory::EditBookInformation()
 			std::cin >> day[1];
 			std::cout << "Enter year added: ";
 			std::cin >> day[2];
-			//Date d(day);
-			(b + index)->setDate(Date(day));
+			(*books)[index].setDate(Date(day));
 			std::cout << "Date set\n";
 			break;
 		case 6:
 			std::cout << "Enter quantity on hand: ";
 			int num;
 			std::cin >> num;
-			(b + index)->setQuantityOnHand(num);
+			(*books)[index].setQuantity(num);
 			std::cout << "Quantity on hand set\n";
 			break;
 		case 7:
 			std::cout << "Enter a new wholesale cost: ";
 			double cost;
 			std::cin >> cost;
-			(b + index)->setWholesaleCost(cost);
+			(*books)[index].setCost(cost);
 			std::cout << "Cost set\n";
 			break;
 		case 8:
 			std::cout << "Enter a new retail price: ";
 			double price;
 			std::cin >> price;
-			(b + index)->setRetailPrice(price);
+			(*books)[index].setPrice(price);
 			std::cout << "Retail price set\n";
 			break;
 		default:
@@ -232,33 +255,38 @@ void Inventory::EditBookInformation()
 	}
 }
 
+/*
+The bundle is first sorted to ensure it is in order by title
+Then a binary search is conducted to find the index of a book with a matching title
+The index of that book is returned if found.
+Otherwise index is set to -1 to indicate the book was not found.
+*/
 int Inventory::searchByTitle(std::string title)
 {
-	Book* b = books->getBundle();
-	for (int i = 0; i < books->getSize(); i++)
+	for (int i = 0; i < (*books).getSize(); i++)
 	{
 		int min = i;
-		for (int j = i + 1; j < books->getSize(); j++)
-			if ((b + j)->getTitle() < (b + min)->getTitle())
+		for (int j = i + 1; j < (*books).getSize(); j++)
+			if ((*books)[j].getTitle() < (*books)[min].getTitle())
 				min = j;
 		if (min != i)
 		{
-			Book temp(*(b + i));
-			*(b + i) = *(b + min);
-			*(b + min) = temp;
+			Book temp((*books)[i]);
+			(*books)[i] = (*books)[min];
+			(*books)[min] = temp;
 		}
 	}
 	
 	int index = -1;
 	int first = 0;
-	int last = books->getSize();
+	int last = (*books).getSize();
 
 	while (first <= last && index == -1)
 	{
 		int mid = (first + last) / 2;
-		if ((b + mid)->getTitle() == title)
+		if ((*books)[mid].getTitle() == title)
 			index = mid;
-		else if ((b + mid)->getTitle() < title)
+		else if ((*books)[mid].getTitle() < title)
 			first = mid + 1;
 		else
 			last = mid - 1;
@@ -267,36 +295,58 @@ int Inventory::searchByTitle(std::string title)
 	return index;
 }
 
+/*
+The bundle is sorted to be in order by ISBN
+A binary search is conducted to find the index of a book with a matching ISBN
+The bundle is resorted to be in order by title becuase the bundle class is designed to always be in order by title.
+The index of the matching book is modified as part of the seccond sort to ensure it is still acurate.
+The index is returned and is either -1 if the book was not found or is the index of the book that has the correct ISBN.
+*/
 int Inventory::searchByISBN(int ISBN)
 {
-	Book* b = books->getBundle();
-	for (int i = 0; i < books->getSize(); i++)
+	for (int i = 0; i < (*books).getSize(); i++)
 	{
 		int min = i;
-		for (int j = i + 1; j < books->getSize(); j++)
-			if ((b + j)->getISBN() < (b + min)->getISBN())
+		for (int j = i + 1; j < (*books).getSize(); j++)
+			if ((*books)[j].getISBN() < (*books)[min].getISBN())
 				min = j;
 		if (min != i)
 		{
-			Book temp(*(b + i));
-			*(b + i) = *(b + min);
-			*(b + min) = temp;
+			Book temp((*books)[i]);
+			(*books)[i] = (*books)[min];
+			(*books)[min] = temp;
 		}
 	}
 
 	int index = -1;
 	int first = 0;
-	int last = books->getSize();
+	int last = (*books).getSize();
 
 	while (first <= last && index == -1)
 	{
 		int mid = (first + last) / 2;
-		if ((b + mid)->getISBN() == ISBN)
+		if ((*books)[mid].getISBN() == ISBN)
 			index = mid;
-		else if ((b + mid)->getISBN() < ISBN)
+		else if ((*books)[mid].getISBN() < ISBN)
 			first = mid + 1;
 		else
 			last = mid - 1;
+	}
+
+	for (int i = 0; i < (*books).getSize(); i++)
+	{
+		int min = i;
+		for (int j = i + 1; j < (*books).getSize(); j++)
+			if ((*books)[j].getTitle() < (*books)[min].getTitle())
+				min = j;
+		if (min != i)
+		{
+			Book temp((*books)[i]);
+			(*books)[i] = (*books)[min];
+			(*books)[min] = temp;
+			if (min == index)
+				index = i;
+		}
 	}
 	return index;
 }
