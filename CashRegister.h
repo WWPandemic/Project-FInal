@@ -34,7 +34,7 @@ private:
 
 public:
 	// Constructors
-	CashRegister(Bundle b);
+	CashRegister(Bundle &b);
 
 	// Functions
 	std::string getDate();							// Return date as string
