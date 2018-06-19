@@ -5,7 +5,7 @@
 #include "CashRegister.h"
 
 /*
-Constructor:	ShoppingCart
+Constructor:	CashRegister
 Author:			Terry Chiem
 Parameters:		Bundle &b - A reference to the bundle created from BookReader
 Returns:		CashRegister object

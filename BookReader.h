@@ -6,17 +6,16 @@
 class BookReader
 {
 private:
-	std::ifstream inFile;
-	std::ofstream outFile;
+	std::ifstream inFile;				// Input file
+	std::ofstream outFile;				// Output file
 
 	std::string* splitInfo(std::string*, std::string, int);		// Splits bookInfo into an array of strings
 	std::string stringISBN(int);			// Convert isbn back to string and conserve 0's
 	std::string stringDate(Date);			// Convert date object back to string
 
 public:
-	// Constructor/Destructor
+	// Constructor
 	BookReader();
-	~BookReader();
 
 	// Functions
 	void setInFile();					// Get input file from user and open

@@ -4,25 +4,25 @@
 #include <fstream>
 #include "BookReader.h"
 
-//*************************************
-//* Constructor/Destructor definition *
-//*************************************
-
+/*
+Constructor:	BookReader
+Author:			Terry Chiem
+Parameters:		none
+Returns:		BookReader object
+Description:	This constructor creates a BookReader and prompts the user
+				for an input file location.
+*/
 BookReader::BookReader()
 {
 	setInFile();
 }
-
-BookReader::~BookReader()
-{
-	inFile.close();
-}
-
-//************************
-//* Function definitions *
-//************************
-
-// Get input file from user and open
+/*
+Function:		setInFile
+Author :		Terry Chiem
+Parameters :	none
+Returns :		none
+Description :	Prompts user for input file location and validates it.
+*/
 void BookReader::setInFile()
 {
 	std::cout << "Creating book inventory data, please enter the file path location ...\n";
@@ -42,8 +42,13 @@ void BookReader::setInFile()
 		}
 	} while (!inFile);
 }
-
-// Open file with exception handling
+/*
+Function:		openInputFile
+Author :		Terry Chiem
+Parameters :	string file - File location
+Returns :		none
+Description :	Opens the file and throws an exception if invalid.
+*/
 void BookReader::openInputFile(std::string file)
 {
 	inFile.open(file);
@@ -53,8 +58,16 @@ void BookReader::openInputFile(std::string file)
 		throw fileException;
 	}
 }
-
-// Splits bookInfo into an array of strings
+/*
+Function:		splitInfo
+Author :		Terry Chiem
+Parameters :	string* splitInfo - The array to hold information in
+				string bookInfo - Book information from file in a single line
+				int size - Size of the splitInfo array
+Returns :		string*
+Description :	Splits book information from file into a string array.
+				Uses ';' as a delimiter.
+*/
 std::string* BookReader::splitInfo(std::string* splitInfo, std::string bookInfo, int size)
 {
 	int start = 0;
@@ -71,8 +84,13 @@ std::string* BookReader::splitInfo(std::string* splitInfo, std::string bookInfo,
 
 	return splitInfo;
 }
-
-// Convert isbn back to string and conserve 0's
+/*
+Function:		stringISBN
+Author :		Terry Chiem
+Parameters :	int isbn
+Returns :		string
+Description :	Converts the ISBN back to string and conserve any missing 0's.
+*/
 std::string BookReader::stringISBN(int isbn)
 {
 	std::string newisbn = "";
@@ -87,8 +105,13 @@ std::string BookReader::stringISBN(int isbn)
 	}
 	return newisbn;
 }
-
-// Convert date object back to string
+/*
+Function:		stringDate
+Author :		Henry Reusser
+Parameters :	Date date
+Returns :		none
+Description :	Converts date object back into string and conserve 0's.
+*/
 std::string BookReader::stringDate(Date date)
 {
 	std::string str = "";
@@ -101,8 +124,15 @@ std::string BookReader::stringDate(Date date)
 	str.append(std::to_string(date[2]));
 	return str;
 }
-
-// Creates bundle from input file
+/*
+Function:		createBundle
+Author :		Terry Chiem
+Parameters :	none
+Returns :		Bundle
+Description :	Creates a bundle from the input file. Goes through each line
+				in the file, splits the information into an array, and then
+				creates a new Book.
+*/
 Bundle BookReader::createBundle()
 {
 	Bundle b;						// Create bundle
@@ -126,20 +156,25 @@ Bundle BookReader::createBundle()
 		// Check bundle size
 		b.ensureSize(++count);
 	}
-
+	inFile.close();
 	return b;
 }
-
-// Export bundle to specified output file
+/*
+Function:		exportBundle
+Author :		Terry Chiem
+Parameters :	Bundle b - Bundle to be exported to output file
+Returns :		none
+Description :	Writes each book in the bundle to an output file.
+*/
 void BookReader::exportBundle(Bundle b)			// Sends bundle to output file
 {
 	// Open output file
-	std::cout << "Exporting book inventory data, please enter the file path location ...\n";
+	std::cout << "Exporting book inventory data to 'BookData.txt'\n";
+	outFile.open("BookData.txt");
 
-	std::string userOutFile;
-	std::cout << "Output File: ";
-	getline(std::cin, userOutFile);			// User enters output file location
-	outFile.open(userOutFile);
+	std::cout << "Press <Enter> to Continue ...";
+	std::string pause;
+	getline(std::cin, pause);
 
 	// Write to output file
 	for (int i = 0; i < b.getSize(); i++) {
@@ -153,6 +188,6 @@ void BookReader::exportBundle(Bundle b)			// Sends bundle to output file
 			b[i].getPrice() << "\n";
 	}
 
-	std::cout << "Book data inventory exported to '" << userOutFile << "'" << std::endl;
+	std::cout << "Export completed!\n\n";
 	outFile.close();
 }
