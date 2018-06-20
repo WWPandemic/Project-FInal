@@ -160,17 +160,17 @@ void Book::setPrice(double retailPrice) {
 	this->m_price = retailPrice;
 }
 
-std::string Book::toString() const{
-	std::ostringstream o; //will eeventually contain all the parameters of book and asorted mini strings
-	o << m_title << std::endl
-		<< "\t writen by " << m_author
-		<< "\t published by " << m_publisher
+std::string Book::toString() const {
+	std::ostringstream o; //will eventually contain all the parameters of book and asorted mini strings
+	o << "Book: " << m_title << std::endl
+		<< "Writen by:" << m_author << std::endl
+		<< "Published by " << m_publisher
 		<< " with an ISNB of " << m_ISBN << std::endl;
-	o << "Added on " << m_date
-		<< " " << m_quantity
-		<< " " << m_cost
-		<< " " << m_price;
-	return o.str(); //returns a single large string of which everythign put inside, be them a string, an int, or a double
+	o << "Added on " << m_date << std::endl
+		<< "Current Stock: " << m_quantity << std::endl
+		<< "Wholesale Price: " << m_cost
+		<< "\t Retail Price: " << m_price;
+	return o.str(); //returns a single large string of which everything put inside, be them a string, an int, or a double
 }
 
 void Book::print() {
