@@ -289,7 +289,8 @@ Description:
 void Report::pauseMenu()
 {
 	std::cout << "Press <Enter> to return to the Report Module" << std::endl;
-	std::cin.get();
+	std::string temp;
+	std::getline(std::cin,temp);
 	clearScreen();
 }
 
