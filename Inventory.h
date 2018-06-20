@@ -76,5 +76,8 @@ public:
 		usedIntroLines = 15;
 	};
 
-	~Inventory() {} //Destructor
+	~Inventory() 
+	{
+		delete books;
+	} //Destructor
 };
