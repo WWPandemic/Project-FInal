@@ -37,7 +37,7 @@ void MainMenu::runOptions()
 		useCashierModule(menuBooks);
 		break;
 	case 3:
-		useReportModule(menuBooks);
+		useReportModule(useReportModule(Bundle(menuBooks)););
 		break;
 	default:
 		isUsingMenu = false;
