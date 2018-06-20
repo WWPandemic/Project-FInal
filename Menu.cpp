@@ -38,6 +38,3 @@ Menu::Menu()
 	introductions[1] = "If you are seeing this, something is wrong";
 	usedIntroLines = 2;
 }
-Menu::~Menu()
-{
-}
