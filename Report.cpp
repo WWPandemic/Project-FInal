@@ -157,7 +157,7 @@ Description:
 void Report::showQuantityList(Bundle books)
 {
 	Array<Book> b = books.getArray();
-	double total = 0;
+	int total = 0;
 
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
