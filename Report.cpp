@@ -111,7 +111,7 @@ void Report::showWholesaleList(Bundle books)
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
 		double d = b[ind].getCost() * b[ind].getQuantity();
-		std::cout << std::setw(2) << std::right << ind + 1 << ") Wholesale cost of: $" 
+		std::cout << std::setw(2) << std::right << ind + 1 << ") Wholesale value of: $" 
 			<< std::setw(5) << std::left << d << " for all copies of " << b[ind].getTitle() +
 			" by " + b[ind].getAuthor() <<  std::endl << std::endl;
 		total += d;
@@ -157,7 +157,7 @@ Description:
 void Report::showQuantityList(Bundle books)
 {
 	Array<Book> b = books.getArray();
-	int total = 0;
+	double total = 0;
 
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
@@ -227,7 +227,7 @@ void Report::showCostList(Bundle books)
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
 		double d = b[ind].getCost();
-		std::cout << "Wholesale cost of " << d << " for the book " << 
+		std::cout << "Wholesale cost of " << d << " for each book " << 
 			b[ind].getTitle() + " by " + b[ind].getAuthor() <<  std::endl << std::endl;
 		total += d;
 	}
