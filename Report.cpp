@@ -181,7 +181,7 @@ void Report::showQuantityList(Bundle books)
 
 	for (int ind = 0; ind < books.getSize(); ind++)
 	{
-		double d = b[ind].getQuantity();
+		int d = b[ind].getQuantity();
 		std::cout << "There are " << d << " copies of " << 
 			b[ind].getTitle() + " by " + b[ind].getAuthor() << std::endl << std::endl;
 		total += d;
