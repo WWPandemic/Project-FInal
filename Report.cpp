@@ -141,7 +141,7 @@ void Report::showRetailList(Bundle books)
 			" by " + b[ind].getAuthor() << std::endl << std::endl; 
 		total += d;
 	}
-	std::cout << "This adds to a total retail price of " << total << "$" << std::endl;
+	std::cout << "This adds to a total retail profit of " << total << "$" << std::endl;
 }
 /*
 Function: showQuantityList
