@@ -428,7 +428,15 @@ int Inventory::searchByISBN(int ISBN)
 	return index;
 }
 
-
+/*
+Function: enterString
+Author: Evren Keskin
+Parameters: none
+Returns: string
+Description
+	This function prompts the user for any string 
+	to type in the console
+*/
 std::string Inventory::enterString()
 {
 	std::string input;
@@ -437,6 +445,16 @@ std::string Inventory::enterString()
 	return input;
 }
 
+/*
+Function: enterInteger
+Author: Evren Keskin
+Parameters: none
+Returns: int
+Description
+This function prompts the user for any positive int value
+to type in the console, and loops through exceptions
+until their input is validated
+*/
 int Inventory::enterInteger()
 {
 	std::string input;
@@ -456,6 +474,16 @@ int Inventory::enterInteger()
 	return numberized;
 }
 
+/*
+Function: enterDouble
+Author: Evren Keskin
+Parameters: none
+Returns: double
+Description
+This function prompts the user for any positive double value
+to type in the console, and loops through exceptions
+until their input is validated
+*/
 double Inventory::enterDouble()
 {
 	std::string input;
