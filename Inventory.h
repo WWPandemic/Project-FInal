@@ -77,7 +77,5 @@ public:
 	};
 
 	~Inventory() 
-	{
-		delete books;
-	} //Destructor
+	{} //Destructor
 };
