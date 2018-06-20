@@ -6,20 +6,10 @@
 class Inventory : public Menu
 {
 private:
-	Bundle* books;
+	Bundle * books;
 
-	//Gets user inpit for menu options
-	void getInput()
-	{
-		do
-		{
-			std::cout << "What would you like to do?" << std::endl;
-			std::string input;
-			getline(std::cin, input);
-			chosenOption = std::stoi(input);
-		} while (chosenOption < 0 || chosenOption > 5);
-	}
-
+	
+	void getInput();//Gets user input for menu options
 	void runOptions(); //Uses user input to select which function to run
 
 	void LookUpBooks(); //Print the details for a user specified book
@@ -29,6 +19,10 @@ private:
 
 	int searchByTitle(std::string title); //Returns the index of a book with the correct title
 	int searchByISBN(int ISBN); //Returns the index of a book with the correct ISBN
+
+	std::string enterString();
+	int enterInteger();
+	double enterDouble();
 
 public:
 	Inventory() //Defualt constructor
@@ -50,7 +44,7 @@ public:
 			introductions[12] = "    Find any book and edit its information",
 			introductions[13] = "5 - Go back to main menu",
 			introductions[14] = "---------------------------------------------------------------------------";
-			usedIntroLines = 15;
+		usedIntroLines = 15;
 	};
 
 	Inventory(Bundle* b) //Constuctor that sets books
