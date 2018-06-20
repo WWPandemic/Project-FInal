@@ -20,9 +20,9 @@ private:
 	int searchByTitle(std::string title); //Returns the index of a book with the correct title
 	int searchByISBN(int ISBN); //Returns the index of a book with the correct ISBN
 
-	std::string enterString();
-	int enterInteger();
-	double enterDouble();
+	std::string enterString();//takes a user input in string format
+	int enterInteger();//takes a user input in int format
+	double enterDouble();//takes a user input in double format
 
 public:
 	Inventory() //Defualt constructor
