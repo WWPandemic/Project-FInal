@@ -21,7 +21,7 @@ CashRegister::CashRegister(Bundle &b)
 	totalProfit = 0.0;
 	transactions = 0;
 	booksSold = 0;
-	setUpRegister();
+	setUpDate();
 
 	introductions[0] = "---------------------------------------------------------------------------";
 	introductions[1] = "                      Welcome to the Cashier module:";
@@ -47,12 +47,11 @@ Returns :		none
 Description :	Prompts user to enter date and register balance then
 				initializes those variables.
 */
-void CashRegister::setUpRegister()
+void CashRegister::setUpDate()
 {
 	clearScreen();
 	std::cout << "Starting up Cash Register module ...\n\n";
 	int m, d, y;
-	double bal;
 	std::string input;
 
 	do {
@@ -71,35 +70,8 @@ void CashRegister::setUpRegister()
 		}
 	} while (y == 0 || y < 2000);
 
-	do {
-		std::cout << "Please enter amount of money in cash register: $";
-		getline(std::cin, input);
-		try {
-			bal = stod(input);
-		}
-		catch (...) {
-			bal = -1;
-		}
-		if (bal == -1) {
-			std::cout << "Invalid amount.\n\n";
-		}
-	} while (bal == -1);
-
 	clearScreen();
-
 	currentDate = Date(m, d, y);
-	balance = bal;
-}
-/*
-Function:		addBalance
-Author :		Terry Chiem
-Parameters :	double b
-Returns :		none
-Description :	Adds the amount to balance.
-*/
-void CashRegister::addBalance(double b)
-{
-	balance += b;
 }
 /*
 Function:		addSales
@@ -155,7 +127,6 @@ Description :	Reduces register values by the book's price.
 void CashRegister::refundMoney(Book b)
 {
 	double retailPrice = b.getPrice();
-	balance -= retailPrice + (retailPrice * (TAX_RATE / 100));
 	totalSales -= retailPrice + (retailPrice * (TAX_RATE / 100));
 	totalTax -= retailPrice * (TAX_RATE / 100);
 	totalProfit -= retailPrice - b.getCost();
@@ -228,7 +199,6 @@ Description :	Adjust register values based on the books in the cart.
 */
 void CashRegister::processCart(ShoppingCart c)		
 {
-	addBalance(c.getTotalCost());
 	addSales(c.getTotalCost());
 	addProfit(c.getTotalProfit());
 	addTax(c.getTax());
@@ -356,19 +326,13 @@ void CashRegister::refundBook(Bundle *b)
 
 			// If refund is confirmed
 			if (confirm == "y" || confirm == "Y") {
-				// If balance is less than refund
-				if (balance < sorted[pos].getPrice() + (sorted[pos].getPrice() * (TAX_RATE / 100))) {
-					std::cout << "Not enough money in register, refund cancelled.\n";
-				}
-				else {
-					// Add 1 to book stock
-					increaseStock(b, sorted[pos]);
-					// Reduce values in register
-					refundMoney(sorted[pos]);
-					// Print confirmation
-					std::cout << std::setprecision(2) << std::fixed;
-					std::cout << "$" << sorted[pos].getPrice() + (sorted[pos].getPrice() * (TAX_RATE / 100)) << " was refunded.\n\n";
-				}
+				// Add 1 to book stock
+				increaseStock(b, sorted[pos]);
+				// Reduce values in register
+				refundMoney(sorted[pos]);
+				// Print confirmation
+				std::cout << std::setprecision(2) << std::fixed;
+				std::cout << "$" << sorted[pos].getPrice() + (sorted[pos].getPrice() * (TAX_RATE / 100)) << " was refunded.\n\n";
 			}
 			// If refund is not confirmed
 			else {
@@ -506,9 +470,8 @@ void CashRegister::printSalesReport()
 	printCenter(currentDate.toString());
 	std::cout << "---------------------------------------------------------------------------\n";
 	std::cout << std::setprecision(2) << std::fixed << std::endl;
-	std::cout << std::setw(60) << std::left << "Register Balance:" << "$" << balance << std::endl;
 	std::cout << std::setw(60) << std::left << "Total Sales:" << "$" << totalSales << std::endl;
-	std::cout << std::setw(60) << std::left << "Total Tax Collected:" << "$" << totalTax << std::endl;
+	std::cout << std::setw(60) << std::left << "Total Tax:" << "$" << totalTax << std::endl;
 	std::cout << std::setw(60) << std::left << "Total Profit:" << "$" << totalProfit << std::endl;
 	std::cout << std::setw(60) << std::left << "Number of Transactions:" << transactions << std::endl;
 	std::cout << std::setw(60) << std::left << "Number of Books Sold:" << booksSold << std::endl << std::endl;

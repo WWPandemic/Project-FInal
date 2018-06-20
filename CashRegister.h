@@ -12,7 +12,6 @@ private:
 	Bundle *bPtr;						// Pointer to reference of main bundle
 	const double TAX_RATE = 9.0;		// Current city tax rate
 	Date currentDate;					// Current date
-	double balance;						// Total money in cash register
 	double totalSales;					// Total sales
 	double totalTax;					// Total tax collected
 	double totalProfit;					// Total profit
@@ -20,8 +19,7 @@ private:
 	int booksSold;						// Number of books sold
 
 	// Mutators
-	void setUpRegister();				// Set date and balance
-	void addBalance(double b);			// Add amount to balance
+	void setUpDate();					// Set current date
 	void addSales(double s);			// Add amount to totalSales
 	void addTax(double t);				// Add amount to totalTax
 	void addProfit(double p);			// Add amount to totalProfit
@@ -43,7 +41,7 @@ public:
 	void processCart(ShoppingCart c);				// Adds cart values to register
 	void reduceStock(Bundle *b, ShoppingCart c);	// Adjust inventory based on purchased items
 	void increaseStock(Bundle *b, Book book);		// Add book back to inventory from refund
-	int findIndex(const Bundle *b, Book book);
+	int findIndex(const Bundle *b, Book book);		// Locates book's index in main bundle
 	void refundBook(Bundle *b);						// Refund a book (pass main book bundle)
 	Bundle sortISBN(Bundle *b);						// Sort bundle by isbn
 	int searchISBN(Bundle b, int search);			// Search main bundle for isbn
