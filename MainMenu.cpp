@@ -51,7 +51,7 @@ void MainMenu::useReportModule(Bundle b)
 	reportMenu.runMenu();
 
 }
-void MainMenu::useCashierModule(Bundle b)
+void MainMenu::useCashierModule(Bundle &b)
 {
 	CashRegister cashRegister = CashRegister(b);
 	cashRegister.runMenu();
