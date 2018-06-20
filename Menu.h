@@ -18,6 +18,5 @@ protected:
 	Bundle menuBooks;
 public:
 	Menu();
-	~Menu();
 	void runMenu();
 };
