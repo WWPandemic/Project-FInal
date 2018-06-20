@@ -13,7 +13,7 @@ void Menu::outputIntroduction()
 void Menu::getInput()
 {
 	cout << "You're using the default menu" << endl;
-} 
+}
 void Menu::runOptions()
 {
 	isUsingMenu = false;
@@ -31,6 +31,11 @@ void Menu::runMenu()
 		runOptions();
 	} while (isUsingMenu);
 }
+
+Bundle Menu::getBundle() {
+	return menuBooks;
+}
+
 Menu::Menu()
 {
 	isUsingMenu = true;

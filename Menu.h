@@ -19,4 +19,5 @@ protected:
 public:
 	Menu();
 	void runMenu();
+	Bundle getBundle();
 };

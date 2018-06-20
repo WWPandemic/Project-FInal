@@ -10,6 +10,7 @@ int main()
 	MainMenu mainmenu = MainMenu(books);
 	mainmenu.runMenu();
 
+	books = mainmenu.getBundle();
 	br.exportBundle(books);
 
 	std::cout << "Please press the <Enter> key to exit" << std::endl;
