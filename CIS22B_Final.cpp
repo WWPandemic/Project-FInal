@@ -2,7 +2,7 @@
 #include "MainMenu.h"
 #include "BookReader.h"
 
-int main() 
+int main()
 {
 	BookReader br;
 	Bundle books = br.createBundle();

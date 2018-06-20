@@ -62,4 +62,3 @@ void MainMenu::useInventoryModule(Bundle *b)
 	Inventory inventory = Inventory(b);
 	inventory.runMenu();
 }
-
